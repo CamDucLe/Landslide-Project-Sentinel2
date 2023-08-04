@@ -3,8 +3,8 @@ import random
 from datetime import datetime
 from metrics import *
 
-
-def testModel(model, generator, best_model_file, stored_dir,  old_test_f1, old_test_miou, test_only=False, is_post_processing=0):
+# TODO process multi resolution, resize mask 256 and mask 64
+def testModel(model, generator, best_model_file, stored_dir,  old_test_f1, old_test_miou, test_only=False, is_post_processing=0, is_multi_resolution=0):
     print("------ testing -------")
     num_batch_test, last_batch_test  = generator.getNumBatch(op='val')
     n_test_imgs   = generator.getNumImg(op='val')

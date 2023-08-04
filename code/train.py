@@ -26,8 +26,77 @@ def lrScheduler(epoch, lr):
     else:
         return 1e-7
 
+def doBackPropagationSingleResolution(model, x_train, y_true_train, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train):
+    with tf.GradientTape() as tape:
+        ## predict masks of a batch of images
+        y_pred_train = model(x_train) # Bx128x128x2
 
-def trainModel(model, stored_dir, generator):
+        # calculte multiple losses on each batch
+        loss_1       = model.loss[0](y_true_train, y_pred_train)   # Focal loss
+        loss_2       = model.loss[1](y_true_train, y_pred_train)   # IOU loss
+        # loss_3       = model.loss[2](y_true_train, y_pred_train)   #
+        loss         = 1.0*loss_1 + 1.0*loss_2 # + 3*loss_3      # total loss
+
+        # ## calculte single loss on each batch
+        # loss_1 = model.loss[0](y_true_train, y_pred_train)   # loss
+        # loss = loss_1              # total loss
+
+        epoch_loss  += loss
+
+        ## do backpropagtion
+        grads        = tape.gradient(loss, model.trainable_variables)
+        # tf.debugging.check_numerics(grads[0], 'grad contains NaN values.')
+        model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
+
+    ## calculte metrics on each batch
+    train_acc               += Accuracy(y_true_train, y_pred_train)   # data type: float32
+    AandB_t, AorB_t          = F1(y_true_train, y_pred_train)         # data type: float32
+    intersection_t, union_t  = MIOU(y_true_train, y_pred_train)       # data type: float32
+
+    AandB_train        += AandB_t
+    AorB_train         += AorB_t
+    intersection_train += intersection_t
+    union_train        += union_t
+    
+    return model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train
+
+def doBackPropagationMultiResolution(model, x_train, y_true_train, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train):
+    with tf.GradientTape() as tape:
+        ## predict masks of a batch of images
+        y_pred_train = model(x_train) # Bx128x128x2
+
+        # calculte multiple losses on each batch
+        loss_1       = model.loss[0](y_true_train[0], y_pred_train[0])   # Focal loss
+        loss_2       = model.loss[1](y_true_train[0], y_pred_train[0])   # IOU loss
+        loss_256     = 1.0*loss_1 + 1.0*loss_2                     # total loss
+        
+        loss_1       = model.loss[0](y_true_train[1], y_pred_train[1])   # Focal loss
+        loss_2       = model.loss[1](y_true_train[1], y_pred_train[1])   # IOU loss
+        loss_128     = 1.0*loss_1 + 1.0*loss_2                     # total loss
+
+        loss_1       = model.loss[0](y_true_train[2], y_pred_train[2])   # Focal loss
+        loss_2       = model.loss[1](y_true_train[2], y_pred_train[2])   # IOU loss
+        loss_64      = 1.0*loss_1 + 1.0*loss_2                     # total loss
+        
+        ## do backpropagtion
+        epoch_loss  += 0.3*loss_256 + 0.4*loss_128 + 0.3*loss_64
+        grads        = tape.gradient(loss, model.trainable_variables)
+        model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
+
+    ## calculte metrics on each batch # TODO other resolution? how to measure ?
+    train_acc               += Accuracy(y_true_train[1], y_pred_train[1])   # data type: float32
+    AandB_t, AorB_t          = F1(y_true_train[1], y_pred_train[1])         # data type: float32
+    intersection_t, union_t  = MIOU(y_true_train[1], y_pred_train[1])       # data type: float32
+
+    AandB_train        += AandB_t
+    AorB_train         += AorB_t
+    intersection_train += intersection_t
+    union_train        += union_t
+    
+    return model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train
+
+
+def trainModel(model, stored_dir, generator, is_multi_resolution):
     train_dir       = '../dataset/train/'
     # val_dir         = '../dataset/val/'
     # test_dir        = '../dataset/test/'
@@ -74,57 +143,78 @@ def trainModel(model, stored_dir, generator):
                 if epoch > 40:
                     old_test_f1, old_test_miou = testModel( model=model, generator=generator,
                                                             best_model_file=best_model_file, stored_dir=stored_dir,
-                                                            old_test_f1=old_test_f1, old_test_miou=old_test_miou)
+                                                            old_test_f1=old_test_f1, old_test_miou=old_test_miou,
+                                                            is_multi_resolution=is_multi_resolution)
             if batch_train_idx == (num_batch_train-1):
                 print("........  100% ..........")
      
             ## get x_train, y_train from data generator
-            if epoch > 60:
-                x_train, y_true_train , n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=False, is_train=True, is_cutmix=False)
+            if is_multi_resolution:
+                if epoch > 60:
+                    x_train, y_true_train_256, y_true_train_128, y_true_train_64, n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=False, is_train=True, is_cutmix=False)
+                else:
+                    x_train, y_true_train_256, y_true_train_128, y_true_train_64, n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=True, is_train=True, is_cutmix=True)
+                y_true_train = [y_true_train_256, y_true_train_128, y_true_train_64]
+                ## optimization process
+                model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train = doBackPropagationSingleResolution(model, x_train, y_true_train, epoch_loss, train_acc,
+                                                                                                                       AandB_train, AorB_train, intersection_train, union_train)
+            
             else:
-                x_train, y_true_train , n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=True, is_train=True, is_cutmix=True)
+                if epoch > 60:
+                    x_train, y_true_train , n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=False, is_train=True, is_cutmix=False)
+                else:
+                    x_train, y_true_train , n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=True, is_train=True, is_cutmix=True)
+                y_true_train = y_true_train
 
-            with tf.GradientTape() as tape:
-                ## predict masks of a batch of images
-                y_pred_train = model(x_train) # Bx128x128x2
+                ## optimization process
+                model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train = doBackPropagationSingleResolution(model, x_train, y_true_train, epoch_loss, train_acc,
+                                                                                                                       AandB_train, AorB_train, intersection_train, union_train)
+            
+            # with tf.GradientTape() as tape:
+            #     ## predict masks of a batch of images
+            #     y_pred_train = model(x_train) # Bx128x128x2
 
-                # calculte multiple losses on each batch
-                loss_1       = model.loss[0](y_true_train, y_pred_train)   # Focal loss
-                loss_2       = model.loss[1](y_true_train, y_pred_train)   # IOU loss
-                # loss_3       = model.loss[2](y_true_train, y_pred_train)   #
-                loss         = 1.0*loss_1 + 1.0*loss_2 # + 3*loss_3      # total loss
+            #     # calculte multiple losses on each batch
+            #     loss_1       = model.loss[0](y_true_train, y_pred_train)   # Focal loss
+            #     loss_2       = model.loss[1](y_true_train, y_pred_train)   # IOU loss
+            #     # loss_3       = model.loss[2](y_true_train, y_pred_train)   #
+            #     loss         = 1.0*loss_1 + 1.0*loss_2 # + 3*loss_3      # total loss
 
-                # ## calculte single loss on each batch
-                # loss_1 = model.loss[0](y_true_train, y_pred_train)   # loss
-                # loss = loss_1              # total loss
+            #     # ## calculte single loss on each batch
+            #     # loss_1 = model.loss[0](y_true_train, y_pred_train)   # loss
+            #     # loss = loss_1              # total loss
 
-                epoch_loss  += loss
+            #     epoch_loss  += loss
 
-                ## do backpropagtion
-                grads        = tape.gradient(loss, model.trainable_variables)
-                # tf.debugging.check_numerics(grads[0], 'grad contains NaN values.')
-                model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
+            #     ## do backpropagtion
+            #     grads        = tape.gradient(loss, model.trainable_variables)
+            #     # tf.debugging.check_numerics(grads[0], 'grad contains NaN values.')
+            #     model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
-            ## calculte metrics on each batch
-            train_acc               += Accuracy(y_true_train, y_pred_train)   # data type: float32
-            AandB_t, AorB_t          = F1(y_true_train, y_pred_train)         # data type: float32
-            intersection_t, union_t  = MIOU(y_true_train, y_pred_train)       # data type: float32
+            # ## calculte metrics on each batch
+            # train_acc               += Accuracy(y_true_train, y_pred_train)   # data type: float32
+            # AandB_t, AorB_t          = F1(y_true_train, y_pred_train)         # data type: float32
+            # intersection_t, union_t  = MIOU(y_true_train, y_pred_train)       # data type: float32
 
-            AandB_train        += AandB_t
-            AorB_train         += AorB_t
-            intersection_train += intersection_t
-            union_train        += union_t
+            # AandB_train        += AandB_t
+            # AorB_train         += AorB_t
+            # intersection_train += intersection_t
+            # union_train        += union_t
 
         ## calculte metrics on each train epoch
-        train_acc /= n_train_imgs*128*128
-        train_f1   = calculateF1(AandB_train, AorB_train)
-        train_miou = calculateMIOU(intersection_train, union_train)
+        if is_multi_resolution:
+            TODO = True
+        else:
+            train_acc /= n_train_imgs*128*128
+            train_f1   = calculateF1(AandB_train, AorB_train)
+            train_miou = calculateMIOU(intersection_train, union_train)
 
         ## testing ...
         if epoch >= 1:
             old_test_f1, old_test_miou = testModel( model=model, generator=generator,
                                                     best_model_file=best_model_file, stored_dir=stored_dir,
-                                                    old_test_f1=old_test_f1, old_test_miou=old_test_miou)
+                                                    old_test_f1=old_test_f1, old_test_miou=old_test_miou, 
+                                                    is_multi_resolution=is_multi_resolution)
 
         ## write log
         with open(os.path.join(stored_dir,"train_log.txt"), "a") as text_file:

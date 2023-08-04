@@ -1,6 +1,7 @@
 import os
 import math
 import h5py
+import cv2
 import numpy as np
 import tensorflow as tf
 from PIL import Image
@@ -13,7 +14,7 @@ from hyper_parameter import *
 
 
 class DataGenerator(object):
-    def __init__(self, data_dir, batch_size, train_ratio=0.8, band_opt=0):
+    def __init__(self, data_dir, batch_size, train_ratio=0.8, band_opt=0, is_multi_resolution=False):
         self.data_dir        = data_dir
         self.images_dir      = data_dir + '/img/'
         self.masks_dir       = data_dir + '/mask/'
@@ -34,6 +35,7 @@ class DataGenerator(object):
         self.label_dict      = HyperParameter().label_dict
         self.img_mean        = np.reshape(np.array(HyperParameter().img_mean), (1, 1, -1))
         self.img_max         = np.reshape(np.array(HyperParameter().img_max), (1, 1, -1))
+        self.is_multi_resolution = is_multi_resolution
 
     def getImgList(self):
         return self.img_list
@@ -123,27 +125,59 @@ class DataGenerator(object):
                 for cut in range(num_cut):
                     one_image, one_mask = self.cutmixImgMask(one_image, one_mask)
 
-            ## reshape
-            nW, nH, nC  = one_image.shape  # (128,128,#bands)
-            nw, nh      = one_mask.shape   # (128,128)
-
-            one_image   = np.reshape(one_image, (1, nW, nH, nC))
-            one_mask    = np.reshape(one_mask, (1, nw, nh))
-
-            ## put all image together to form a 4-d tensor
-            if (n_image == 0):
-                seq_x = one_image
-                seq_y = one_mask
+            ## apply multi resolution
+            if self.is_multi_resolution:
+                one_image, mask_256, mask_128, mask_64 = self.applyMultiResolution(one_image, one_mask)
+                ## put all image together to form a 4-d tensor
+                if (n_image == 0):
+                    seq_x = one_image
+                    seq_y_256 = mask_256
+                    seq_y_128 = mask_128
+                    seq_y_64  = mask_64
+                else:
+                    seq_x = np.concatenate((seq_x, one_image), axis=0)
+                    seq_y_256 = np.concatenate((seq_y_256, mask_256), axis=0)
+                    seq_y_128 = np.concatenate((seq_y_128, mask_128), axis=0)
+                    seq_y_64  = np.concatenate((seq_y_64,  mask_64),  axis=0)
             else:
-                seq_x = np.concatenate((seq_x, one_image), axis=0)
-                seq_y = np.concatenate((seq_y, one_mask), axis=0)
-
+                nW, nH, nC  = one_image.shape  # (128,128,#bands)
+                nw, nh      = one_mask.shape   # (128,128)
+                ## reshape
+                one_image   = np.reshape(one_image, (1, nW, nH, nC))
+                one_mask    = np.reshape(one_mask, (1, nw, nh))
+                ## put all image together to form a 4-d tensor
+                if (n_image == 0):
+                    seq_x = one_image
+                    seq_y = one_mask
+                else:
+                    seq_x = np.concatenate((seq_x, one_image), axis=0)
+                    seq_y = np.concatenate((seq_y, one_mask), axis=0)
+            
             n_image += 1
 
-            seq_x = tf.convert_to_tensor(seq_x, dtype=tf.float32)
+        seq_x = tf.convert_to_tensor(seq_x, dtype=tf.float32)
+        if self.is_multi_resolution:
+            seq_y_256 = tf.convert_to_tensor(seq_y_256, dtype=tf.float32)
+            seq_y_128 = tf.convert_to_tensor(seq_y_128, dtype=tf.float32)
+            seq_y_64  = tf.convert_to_tensor(seq_y_64,  dtype=tf.float32)
+            return seq_x, seq_y_256, seq_y_128, seq_y_64, n_image
+        else:
             seq_y = tf.convert_to_tensor(seq_y, dtype=tf.float32)
+            return seq_x, seq_y, n_image
 
-        return seq_x, seq_y, n_image
+    def applyMultiResolution(self, one_image, one_mask):
+        w,h,c = one_image.shape
+        ## resize
+        mask_256 = cv2.resize(one_mask, (w*2, h*2), interpolation=cv2.INTER_NEAREST)
+        mask_128 = one_mask
+        mask_64  = cv2.resize(one_mask, (w//2, h//2), interpolation=cv2.INTER_NEAREST)
+        ## reshape
+        one_image = np.reshape(one_image, (1, 128, 128, c))                       
+        mask_256 = np.reshape(mask_256, (1, 256, 256))            
+        mask_128 = np.reshape(mask_128, (1, 128, 128))            
+        mask_64  = np.reshape(mask_64,  (1, 64, 64))    
+
+        return one_image, mask_256, mask_128, mask_64
 
     def augmentateImage(self, one_image, one_mask):
         ## rotate both image and mask
@@ -287,6 +321,20 @@ if __name__ == '__main__':
     print(generator.getNumBatch(op='val'))
     imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
     print(n_imgs, imgs.shape, masks.shape, type(imgs))
+
+    del generator,masks,imgs,n_imgs
+
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1, is_multi_resolution=True)
+    print(generator.getNumBatch(op='train'))
+    print(generator.getNumBatch(op='val'))
+    imgs, masks_256, masks_128, masks_64, n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    print(n_imgs, imgs.shape, masks_256.shape, masks_128.shape, masks_64.shape, type(imgs))
+    visualizeOneImg(imgs[1], op=0)     
+    visualizeOneMask(masks_256[1]) 
+    visualizeOneMask(masks_128[1]) 
+    visualizeOneMask(masks_64[1]) 
+    del generator,masks_256,masks_128,masks_64,imgs
+
 
 
     ### DRAW EVERYTHING - REMEMBER TO UNCOMMENT ###

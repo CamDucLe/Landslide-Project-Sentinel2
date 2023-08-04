@@ -60,8 +60,6 @@ def getWaveNet(input_shape=(128,128,21), num_classes=2, dropout_ratio=0.2):
         x = downBlock(x, filters=128)
         x = downBlock(x, filters=64)
         x = upBlock(x, filters=128)
-
-        
         x = x_init + x
 
     x = Dropout(dropout_ratio)(x)
