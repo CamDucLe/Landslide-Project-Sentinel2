@@ -26,6 +26,21 @@ def lrScheduler(epoch, lr):
     else:
         return 1e-7
 
+
+def calculteMetricTrain(y_true_train, y_pred_train, train_acc, AandB_train, AorB_train, intersection_train, union_train):
+    train_acc               += Accuracy(y_true_train, y_pred_train)   # data type: float32
+    AandB_t, AorB_t          = F1(y_true_train, y_pred_train)         # data type: float32
+    intersection_t, union_t  = MIOU(y_true_train, y_pred_train)       # data type: float32
+
+    AandB_train        += AandB_t
+    AorB_train         += AorB_t
+    intersection_train += intersection_t
+    union_train        += union_t
+    
+    return train_acc, AandB_train, AorB_train, intersection_train, union_train
+
+
+
 def doBackPropagationSingleResolution(model, x_train, y_true_train, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train):
     with tf.GradientTape() as tape:
         ## predict masks of a batch of images
@@ -49,15 +64,9 @@ def doBackPropagationSingleResolution(model, x_train, y_true_train, epoch_loss, 
         model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
     ## calculte metrics on each batch
-    train_acc               += Accuracy(y_true_train, y_pred_train)   # data type: float32
-    AandB_t, AorB_t          = F1(y_true_train, y_pred_train)         # data type: float32
-    intersection_t, union_t  = MIOU(y_true_train, y_pred_train)       # data type: float32
+    train_acc, AandB_train, AorB_train, intersection_train, union_train = calculteMetricTrain(y_true_train, y_pred_train,  
+                                                                                            train_acc, AandB_train, AorB_train, intersection_train, union_train)
 
-    AandB_train        += AandB_t
-    AorB_train         += AorB_t
-    intersection_train += intersection_t
-    union_train        += union_t
-    
     return model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train
 
 def doBackPropagationMultiResolution(model, x_train, y_true_train, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train):
@@ -84,14 +93,8 @@ def doBackPropagationMultiResolution(model, x_train, y_true_train, epoch_loss, t
         model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
     ## calculte metrics on each batch # TODO other resolution? how to measure ?
-    train_acc               += Accuracy(y_true_train[1], y_pred_train[1])   # data type: float32
-    AandB_t, AorB_t          = F1(y_true_train[1], y_pred_train[1])         # data type: float32
-    intersection_t, union_t  = MIOU(y_true_train[1], y_pred_train[1])       # data type: float32
-
-    AandB_train        += AandB_t
-    AorB_train         += AorB_t
-    intersection_train += intersection_t
-    union_train        += union_t
+    train_acc, AandB_train, AorB_train, intersection_train, union_train = calculteMetricTrain(y_true_train[1], y_pred_train[1],  
+                                                                                            train_acc, AandB_train, AorB_train, intersection_train, union_train)
     
     return model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train
 
@@ -156,7 +159,7 @@ def trainModel(model, stored_dir, generator, is_multi_resolution):
                     x_train, y_true_train_256, y_true_train_128, y_true_train_64, n_imgs = generator.getBatch(batch_num=batch_train_idx, is_aug=True, is_train=True, is_cutmix=True)
                 y_true_train = [y_true_train_256, y_true_train_128, y_true_train_64]
                 ## optimization process
-                model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train = doBackPropagationSingleResolution(model, x_train, y_true_train, epoch_loss, train_acc,
+                model, epoch_loss, train_acc, AandB_train, AorB_train, intersection_train, union_train = doBackPropagationMultiResolution(model, x_train, y_true_train, epoch_loss, train_acc,
                                                                                                                        AandB_train, AorB_train, intersection_train, union_train)
             
             else:
