@@ -65,13 +65,13 @@ def getUnet(input_shape=(128,128,19), num_classes=2, dropout_ratio=0.2):
     x = upsampleBlock(x, y128, filter[0]) # 128x128x64
     x = Dropout(dropout_ratio)(x)
 
-    x64  = Conv2D(filters=64, kernel_size=3, strides=2, padding='same', kernel_initializer="he_normal")(x) # 64x64x64
+    x64  = Conv2D(filters=64, kernel_size=3, strides=2, padding='same', kernel_initializer="he_normal", activation='relu')(x) # 64x64x64
     x128 = x # 128x128x64
-    x256 = Conv2DTranspose(filters=64, kernel_size=3, strides=2, padding='same', kernel_initializer="he_normal")(x)  # 256x256x64
-
-    out1 = Conv2D(num_classes, 1, activation='softmax')(x64)  # 64x64x2
+    x256 = Conv2DTranspose(filters=64, kernel_size=3, strides=2, padding='same', kernel_initializer="he_normal", activation='relu')(x)  # 256x256x64
+    
+    out1 = Conv2D(num_classes, 1, activation='softmax')(x256) # 256x256x2
     out2 = Conv2D(num_classes, 1, activation='softmax')(x128) # 128x128x2
-    out3 = Conv2D(num_classes, 1, activation='softmax')(x256) # 256x256x2
+    out3 = Conv2D(num_classes, 1, activation='softmax')(x64)  # 64x64x2
 
     return Model(input, [out1,out2,out3], name='Unet')
 

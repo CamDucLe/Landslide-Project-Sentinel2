@@ -3,7 +3,34 @@ import random
 from datetime import datetime
 from metrics import *
 
-# TODO process multi resolution, resize mask 256 and mask 64
+
+
+def calculteMetricTest(y_true_test, y_pred_test, test_acc, AandB_test, AorB_test, intersection_test, union_test):
+    test_acc                += Accuracy(y_true_test, y_pred_test)   # data type: float32
+    AandB_t, AorB_t          = F1(y_true_test, y_pred_test)         # data type: float32
+    intersection_t, union_t  = MIOU(y_true_test, y_pred_test)       # data type: float32
+
+    AandB_test        += AandB_t
+    AorB_test         += AorB_t
+    intersection_test += intersection_t
+    union_test        += union_t
+
+    return test_acc, AandB_test, AorB_test, intersection_test, union_test
+ 
+
+def doPostProcessing(y_pred_test, is_post_processing):
+    if is_post_processing == 0:
+        return y_pred_test
+    elif is_post_processing == 1:
+        y_pred_test = postProcessingPixelLevelThresholding(y_pred_test, threshold=0.72) # apply thresholding
+    elif is_post_processing == 2:
+        y_pred_test = postProcessingMorphology(y_pred_test, op=1) # apply thresholding (remove pepper noise)
+    elif is_post_processing == 3:
+        y_pred_test = postProcessingAll(y_pred_test)  # apply all post_processing techniques
+    
+    return y_pred_test
+
+
 def testModel(model, generator, best_model_file, stored_dir,  old_test_f1, old_test_miou, test_only=False, is_post_processing=0, is_multi_resolution=0):
     print("------ testing -------")
     num_batch_test, last_batch_test  = generator.getNumBatch(op='val')
@@ -20,24 +47,19 @@ def testModel(model, generator, best_model_file, stored_dir,  old_test_f1, old_t
     union_test        = tf.zeros_like([0,0], dtype=tf.float32)
 
     for batch_test_idx in range(num_batch_test):
-        x_test, y_true_test , n_imgs = generator.getBatch(batch_num=batch_test_idx, is_aug=False, is_train=False, is_cutmix=False)
-        y_pred_test         = model(x_test)
-        if is_post_processing == 1:
-            y_pred_test = postProcessingPixelLevelThresholding(y_pred_test, threshold=0.72) # apply thresholding
-        elif is_post_processing == 2:
-            y_pred_test = postProcessingMorphology(y_pred_test, op=1) # apply thresholding (remove pepper noise)
-        elif is_post_processing == 3:
-            y_pred_test = postProcessingAll(y_pred_test)  # apply all post_processing techniques
+        if is_multi_resolution:
+            x_test, y_true_test_256, y_true_test_128, y_true_test_64, n_imgs = generator.getBatch(batch_num=batch_test_idx, is_aug=False, is_train=False, is_cutmix=False)
+            y_pred_test = model(x_test)
+            y_pred_test[1] = doPostProcessing(y_pred_test[1], is_post_processing)
+            ## calculte metrics on each batch
+            test_acc, AandB_test, AorB_test, intersection_test, union_test = calculteMetricTest(y_true_test_128, y_pred_test[1], test_acc, AandB_test, AorB_test, intersection_test, union_test)
+        else:
+            x_test, y_true_test , n_imgs = generator.getBatch(batch_num=batch_test_idx, is_aug=False, is_train=False, is_cutmix=False)
+            y_pred_test = model(x_test)
+            y_pred_test = doPostProcessing(y_pred_test, is_post_processing)
+            ## calculte metrics on each batch
+            test_acc, AandB_test, AorB_test, intersection_test, union_test = calculteMetricTest(y_true_test, y_pred_test, test_acc, AandB_test, AorB_test, intersection_test, union_test)
 
-        ## calculte metrics on each batch
-        test_acc                += Accuracy(y_true_test, y_pred_test)   # data type: float32
-        AandB_t, AorB_t          = F1(y_true_test, y_pred_test)         # data type: float32
-        intersection_t, union_t  = MIOU(y_true_test, y_pred_test)       # data type: float32
-
-        AandB_test        += AandB_t
-        AorB_test         += AorB_t
-        intersection_test += intersection_t
-        union_test        += union_t
 
     ## calculte metrics on each test epoch 
     test_acc /= n_test_imgs*128*128
@@ -54,5 +76,8 @@ def testModel(model, generator, best_model_file, stored_dir,  old_test_f1, old_t
             print('...... Save model completed ......' )
             with open(os.path.join(stored_dir,"train_log.txt"), "a") as text_file:
                 text_file.write("\n --- Save best model at Epoch: {}; MIOU: {}; F1: {} ---\n\n".format(epoch, old_test_miou, old_test_f1))
+        else:
+            print('Test F1: ', test_f1)
+            print('Test MIOU: ', test_miou)
 
     return old_test_f1, old_test_miou
