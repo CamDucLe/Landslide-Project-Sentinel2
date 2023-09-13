@@ -102,14 +102,14 @@ class DataGenerator(object):
             ## add feature
             if self.band_opt == 1:   #  output shape: 128x128xC
                 one_image = addRGB(one_image, is_rgb=False)
-                # one_image = addRGB_2(one_image, is_rgb=False)
+                #one_image = addRGB_2(one_image, is_rgb=False)
                 one_image = addNDVI(one_image)
                 one_image = addNBR(one_image)
                 one_image = addVegetationIndex(one_image)
                 one_image = addGray(one_image)
                 # one_image = addEdge(one_image)
-                # one_image = addBlur(one_image)
-                # one_image = addGradient(one_image)
+                one_image = addBlur(one_image)
+                #one_image = addGradient(one_image)
             elif self.band_opt == 2: # 3 + 3 + 3 bands (rgb only) -> output shape: 128x128x6
                 one_image = one_image[:,:,1:4]               # bgr
                 one_image = addRGB(one_image, is_rgb=True)   # rgb normalize -> BGRRGB -> 128x128x6
@@ -278,14 +278,14 @@ class DataGenerator(object):
 
         if self.band_opt == 1:       # output shape: 128x128x26
             img_2 = addRGB(img_2, is_rgb=False)
-            # img_2 = addRGB_2(img_2, is_rgb=False)
+            #img_2 = addRGB_2(img_2, is_rgb=False)
             img_2 = addNDVI(img_2)
             img_2 = addNBR(img_2)
             img_2 = addVegetationIndex(img_2)
             img_2 = addGray(img_2)
             # img_2 = addEdge(img_2)
-            # img_2 = addBlur(img_2)
-            # img_2 = addGradient(img_2)
+            img_2 = addBlur(img_2)
+            #img_2 = addGradient(img_2)
         elif self.band_opt == 2:   # output shape: 128x128x9
             img_2 = img_2[:,:,1:4]               # bgr
             img_2 = addRGB(img_2, is_rgb=True)   # rgb normalize -> BGRRGB -> 128x128x6
@@ -304,35 +304,40 @@ class DataGenerator(object):
 
 if __name__ == '__main__':
     ### TEST GET BATCH ###
-    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=0)
+    # generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=0)
+    # print(generator.getNumBatch(op='train'))
+    # print(generator.getNumBatch(op='val'))
+    # imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    # print(n_imgs, imgs.shape, masks.shape, type(imgs))
+
+    # generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1)
+    # print(generator.getNumBatch(op='train'))
+    # print(generator.getNumBatch(op='val'))
+    # imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    # print(n_imgs, imgs.shape, masks.shape, type(imgs))
+
+    # generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=2)
+    # print(generator.getNumBatch(op='train'))
+    # print(generator.getNumBatch(op='val'))
+    # imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    # print(n_imgs, imgs.shape, masks.shape, type(imgs))
+
+    # del generator,masks,imgs,n_imgs
+
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=12, train_ratio=0.8, band_opt=1, is_multi_resolution=True)
     print(generator.getNumBatch(op='train'))
     print(generator.getNumBatch(op='val'))
-    imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
-    print(n_imgs, imgs.shape, masks.shape, type(imgs))
 
-    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1)
-    print(generator.getNumBatch(op='train'))
-    print(generator.getNumBatch(op='val'))
-    imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
-    print(n_imgs, imgs.shape, masks.shape, type(imgs))
+    imgs, masks_256, masks_128, masks_64, n_imgs = generator.getBatch(batch_num=1, is_aug=False, is_train=True)
+    visualizeOneImg(imgs[1], op=0)     
+    visualizeOneMask(masks_128[1]) 
 
-    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=2)
-    print(generator.getNumBatch(op='train'))
-    print(generator.getNumBatch(op='val'))
-    imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
-    print(n_imgs, imgs.shape, masks.shape, type(imgs))
-
-    del generator,masks,imgs,n_imgs
-
-    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1, is_multi_resolution=True)
-    print(generator.getNumBatch(op='train'))
-    print(generator.getNumBatch(op='val'))
     imgs, masks_256, masks_128, masks_64, n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
     print(n_imgs, imgs.shape, masks_256.shape, masks_128.shape, masks_64.shape, type(imgs))
     visualizeOneImg(imgs[1], op=0)     
-    visualizeOneMask(masks_256[1]) 
+    # visualizeOneMask(masks_256[1]) 
     visualizeOneMask(masks_128[1]) 
-    visualizeOneMask(masks_64[1]) 
+    # visualizeOneMask(masks_64[1]) 
     del generator,masks_256,masks_128,masks_64,imgs
 
 

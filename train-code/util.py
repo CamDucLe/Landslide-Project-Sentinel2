@@ -124,9 +124,9 @@ def addRGB_2(multispectral_img, is_rgb=False):
   else:
     bgr = multispectral_img[:,:,1:4] # BGR
 
-  red   = np.clip((bgr[:,:,2]*HyperParameter().img_mean[3] ) /  5000, 0, 1)# HyperParameter().img_max[3]
-  green = np.clip((bgr[:,:,1]*HyperParameter().img_mean[2] ) /  5000, 0 , 1) # HyperParameter().img_max[2]
-  blue  = np.clip((bgr[:,:,0]*HyperParameter().img_mean[1] ) /  5000, 0, 1) # HyperParameter().img_max[1]
+  red   = np.clip((bgr[:,:,2]*HyperParameter().img_mean[3] ) /  6000, 0, 1)# HyperParameter().img_max[3]
+  green = np.clip((bgr[:,:,1]*HyperParameter().img_mean[2] ) /  6000, 0 , 1) # HyperParameter().img_max[2]
+  blue  = np.clip((bgr[:,:,0]*HyperParameter().img_mean[1] ) /  6000, 0, 1) # HyperParameter().img_max[1]
 
   red   = np.expand_dims(red, axis=2)
   green = np.expand_dims(green, axis=2)

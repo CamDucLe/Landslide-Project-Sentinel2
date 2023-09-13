@@ -57,8 +57,8 @@ def F1(y_true, y_pred): # F1/2 < IOU < F1
   y_true = tf.reshape(y_true,[-1]) # (B*W*H,)
 
   # cast type
-  y_true = tf.cast(y_true, dtype=tf.int8)
-  y_pred = tf.cast(y_pred, dtype=tf.int8)
+  y_true = tf.cast(y_true, dtype=tf.uint8)
+  y_pred = tf.cast(y_pred, dtype=tf.uint8)
 
   # one-hot
   y_true = tf.one_hot(y_true, depth=2, axis=-1)
@@ -106,8 +106,8 @@ def MIOU(y_true, y_pred):
   y_true = tf.reshape(y_true,[-1]) # (B*W*H,)
 
   # cast type
-  y_true = tf.cast(y_true, dtype=tf.int8)
-  y_pred = tf.cast(y_pred, dtype=tf.int8)
+  y_true = tf.cast(y_true, dtype=tf.uint8)
+  y_pred = tf.cast(y_pred, dtype=tf.uint8)
 
   # one-hot
   y_true = tf.one_hot(y_true, depth=2, axis=-1)

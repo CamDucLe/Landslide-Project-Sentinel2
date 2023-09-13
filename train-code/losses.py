@@ -20,7 +20,7 @@ class EntropyLoss(tf.keras.losses.Loss):
                 - entropy loss: a scalar
         """
         ## one-hot
-        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHx2
+        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHx2
 
         ## avoid absolute zero and absolute one
         y_pred  = tf.clip_by_value(y_pred, 1e-7, 1. - 1e-7)
@@ -56,7 +56,7 @@ class FocalLoss(tf.keras.losses.Loss):
                 - focal loss: a scalar
         """
         ## one-hot
-        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHx2
+        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHx2
 
         ## avoid absolute zero and absolute one
         y_pred  = tf.clip_by_value(y_pred, 1e-7, 1. - 1e-7)
@@ -96,7 +96,7 @@ class LogCoshLoss(tf.keras.losses.Loss):
                 - log cosh loss: a scalar
         """
         ## one-hot
-        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHx2
+        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHx2
 
         ## avoid absolute zero and absolute one
         y_pred  = tf.clip_by_value(y_pred, 1e-7, 1. - 1e-7)
@@ -132,7 +132,7 @@ class IOULoss(tf.keras.losses.Loss):
         epsilon = 1e-7
 
         ## one-hot
-        y_true  = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHx2
+        y_true  = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHx2
 
         ## reshape
         y_true  = tf.reshape(y_true, [-1, self.num_classes]) # (B*W*H,2)
@@ -171,7 +171,7 @@ class TverskyLoss(tf.keras.losses.Loss):
         epsilon = 1e-7
 
         ## one-hot
-        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHx2
+        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHx2
 
         ## reshape
         y_true = tf.reshape(y_true, [-1, self.num_classes]) # (B*W*H,2)
@@ -207,7 +207,7 @@ class LovaszLoss(tf.keras.losses.Loss):
             # Output:
                 - lovasz loss: a scalar
         """
-        y_true  = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHx2
+        y_true  = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHx2
         B,W,H,C = y_true.shape
         ## reshape
         y_true  = tf.reshape(y_true, (-1,self.num_classes)) # (B*W*H)*2
@@ -303,7 +303,7 @@ class BoundaryLoss(tf.keras.losses.Loss):
         y_pred = tf.clip_by_value(y_pred, 1e-7, 1. - 1e-7) # BxWxHxC
 
         ## one-hot
-        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHxC
+        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHxC
 
         ## Compute the mean loss across classes
         boundary_loss = boundary_weight * (- y_true * tf.math.log(y_pred))
@@ -366,7 +366,7 @@ class CenterLoss(tf.keras.losses.Loss):
         y_pred = tf.clip_by_value(y_pred, 1e-7, 1. - 1e-7) # BxWxHxC
 
         ## one-hot
-        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.int8), depth=self.num_classes, axis=-1) # BxWxHxC
+        y_true = tf.one_hot(tf.cast(y_true, dtype=tf.uint8), depth=self.num_classes, axis=-1) # BxWxHxC
 
         ## Compute the mean loss across classes
         boundary_loss = boundary_weight * (- y_true * tf.math.log(y_pred))

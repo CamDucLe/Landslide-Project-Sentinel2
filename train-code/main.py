@@ -41,7 +41,7 @@ def main():
     is_multi_resolution = int(args.is_multi_res)
 
     ## initialize data generator
-    generator = DataGenerator(data_dir='../dataset/train', batch_size=BATCH_SIZE, train_ratio=0.8, band_opt=1, is_multi_resolution=is_multi_resolution) # band_opt: 0->14, 1->21, 2->9
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=BATCH_SIZE, train_ratio=0.8, band_opt=1, is_multi_resolution=is_multi_resolution) # band_opt: 0->14, 1->23, 2->9
 
     if is_train == 1:
         model = createModel()
@@ -53,7 +53,7 @@ def main():
             old_test_f1, old_test_miou = testModel( model=model, generator=generator, 
                                                     best_model_file=best_model_file, stored_dir=stored_dir,
                                                     old_test_f1=0, old_test_miou=0, 
-                                                    test_only=True, is_post_processing=0, 
+                                                    test_only=True, is_post_processing=1, 
                                                     is_multi_resolution=is_multi_resolution)      
                                                     # is_post_processing=1 : apply thresholding,
                                                     # is_post_processing=2 : apply morphology,  

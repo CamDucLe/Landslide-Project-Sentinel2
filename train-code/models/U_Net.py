@@ -72,7 +72,7 @@ def getUnet(input_shape=(128,128,19), num_classes=2, dropout_ratio=0.2):
 
 ## create full model
 def getModel(pre_trained_model=None):
-    unet = getUnet(input_shape=(128,128,21))
+    unet = getUnet(input_shape=(128,128,25))
     if pre_trained_model is not None:
         model.set_weights(pre_trained_model.get_weights())
     unet.trainable = True
