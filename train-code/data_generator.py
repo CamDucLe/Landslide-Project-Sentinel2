@@ -14,20 +14,25 @@ from hyper_parameter import *
 
 
 class DataGenerator(object):
-    def __init__(self, data_dir, batch_size, train_ratio=0.8, band_opt=0, is_multi_resolution=False):
+    def __init__(self, data_dir, batch_size, train_ratio=0.8, test_fold=1, band_opt=1, is_multi_resolution=False):
         self.data_dir        = data_dir
         self.images_dir      = data_dir + '/img/'
         self.masks_dir       = data_dir + '/mask/'
+        self.test_fold       = test_fold
 
-        self.n_img_train     = math.ceil( len(os.listdir(self.images_dir)) * train_ratio )
-        self.n_img_val       = len(os.listdir(self.images_dir)) - self.n_img_train
+        self.n_img           = len(os.listdir(self.images_dir))
+        #self.n_img_train     = math.ceil( len(os.listdir(self.images_dir)) * train_ratio )
+        #self.n_img_val       = len(os.listdir(self.images_dir)) - self.n_img_train
 
         self.img_list        = os.listdir(self.images_dir)
         self.mask_list       = os.listdir(self.masks_dir)
         self.img_list        = natsorted(self.img_list)
         self.mask_list       = natsorted(self.mask_list)
 
-        self.landslide_mask, self.landslide_image  = findLandslideImage(data_dir, train_ratio)
+        self.train_img_list, self.train_mask_list, self.val_img_list, self.val_mask_list, self. n_img_val = self.getTrainTestList()
+        self.n_img_train     = self.n_img - self.n_img_val
+
+        self.landslide_mask, self.landslide_image  = findLandslideImage(data_dir, self.test_fold)
 
         self.batch_size      = batch_size
         self.band_opt        = band_opt # 0->14; 1->19; 2->9; 3->20
@@ -36,6 +41,37 @@ class DataGenerator(object):
         self.img_mean        = np.reshape(np.array(HyperParameter().img_mean), (1, 1, -1))
         self.img_max         = np.reshape(np.array(HyperParameter().img_max), (1, 1, -1))
         self.is_multi_resolution = is_multi_resolution
+    
+    def getTrainTestList(self):
+        if self.test_fold == 1:
+            tr1 = int(self.n_img*0.8) 
+            tr2 = int(self.n_img*1)
+        elif self.test_fold == 2:
+            tr1 = int(self.n_img*0.6) 
+            tr2 = int(self.n_img*0.8)
+        elif self.test_fold == 3:
+            tr1 = int(self.n_img*0.4)
+            tr2 = int(self.n_img*0.6)
+        elif self.test_fold == 4:
+            tr1 = int(self.n_img*0.2)
+            tr2 = int(self.n_img*0.4)
+        elif self.test_fold == 5:
+            tr1 = int(self.n_img*0.0)
+            tr2 = int(self.n_img*0.2)
+
+        print("==== Test fold: ", self.test_fold, " =====")
+        
+        train_mask_list = self.mask_list[:tr1] + self.mask_list[tr2:]
+        train_image_list = self.img_list[:tr1] + self.img_list[tr2:] 
+
+        test_mask_list = self.mask_list[tr1:tr2]
+        test_image_list = self.img_list[tr1:tr2]
+
+        if len(train_mask_list) + len(test_mask_list) != self.n_img:
+            print("Something wrong in DataGenerator: train + test != 3799")
+            exit()
+
+        return train_image_list, train_mask_list, test_image_list, test_mask_list, tr2 - tr1
 
     def getImgList(self):
         return self.img_list
@@ -53,13 +89,13 @@ class DataGenerator(object):
 
     def getBatch(self, batch_num, is_aug=False, is_train=True, is_cutmix=True):
         if is_train:  # training
-            img_list  = self.img_list[:self.n_img_train]
-            mask_list = self.mask_list[:self.n_img_train]
+            img_list  = self.train_img_list
+            mask_list = self.train_mask_list
             is_aug    = is_aug
             op        = "train"
         else:         # validation
-            img_list  = self.img_list[self.n_img_train:]
-            mask_list = self.mask_list[self.n_img_train:]
+            img_list  = self.val_img_list
+            mask_list = self.val_mask_list
             is_aug    = False
             is_cutmix = False
             op        = "val"
@@ -125,6 +161,11 @@ class DataGenerator(object):
                 for cut in range(num_cut):
                     one_image, one_mask = self.cutmixImgMask(one_image, one_mask)
 
+            ## test for Sentinel-2 data only which gets rid of B13,B14 => comment below row if we can combine ALOS PALSAR
+            ## in case of deployment -> rewrite function in util.py so that data generator can work with 12 channels input instead of 14 input channels
+            ## TODO ##
+            one_image =  np.concatenate((one_image[:,:,:12], one_image[:,:,14:]), axis=-1)
+
             ## apply multi resolution
             if self.is_multi_resolution:
                 one_image, mask_256, mask_128, mask_64 = self.applyMultiResolution(one_image, one_mask)
@@ -156,6 +197,7 @@ class DataGenerator(object):
             n_image += 1
 
         seq_x = tf.convert_to_tensor(seq_x, dtype=tf.float32)
+
         if self.is_multi_resolution:
             seq_y_256 = tf.convert_to_tensor(seq_y_256, dtype=tf.float32)
             seq_y_128 = tf.convert_to_tensor(seq_y_128, dtype=tf.float32)
@@ -304,40 +346,35 @@ class DataGenerator(object):
 
 if __name__ == '__main__':
     ### TEST GET BATCH ###
-    # generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=0)
-    # print(generator.getNumBatch(op='train'))
-    # print(generator.getNumBatch(op='val'))
-    # imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
-    # print(n_imgs, imgs.shape, masks.shape, type(imgs))
-
-    # generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1)
-    # print(generator.getNumBatch(op='train'))
-    # print(generator.getNumBatch(op='val'))
-    # imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
-    # print(n_imgs, imgs.shape, masks.shape, type(imgs))
-
-    # generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=2)
-    # print(generator.getNumBatch(op='train'))
-    # print(generator.getNumBatch(op='val'))
-    # imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
-    # print(n_imgs, imgs.shape, masks.shape, type(imgs))
-
-    # del generator,masks,imgs,n_imgs
-
-    generator = DataGenerator(data_dir='../dataset/train', batch_size=12, train_ratio=0.8, band_opt=1, is_multi_resolution=True)
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=0)
     print(generator.getNumBatch(op='train'))
     print(generator.getNumBatch(op='val'))
+    imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    print(n_imgs, imgs.shape, masks.shape, type(imgs))
 
-    imgs, masks_256, masks_128, masks_64, n_imgs = generator.getBatch(batch_num=1, is_aug=False, is_train=True)
-    visualizeOneImg(imgs[1], op=0)     
-    visualizeOneMask(masks_128[1]) 
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1)
+    print(generator.getNumBatch(op='train'))
+    print(generator.getNumBatch(op='val'))
+    imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    print(n_imgs, imgs.shape, masks.shape, type(imgs))
 
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=2)
+    print(generator.getNumBatch(op='train'))
+    print(generator.getNumBatch(op='val'))
+    imgs,masks,n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
+    print(n_imgs, imgs.shape, masks.shape, type(imgs))
+
+    del generator,masks,imgs,n_imgs
+
+    generator = DataGenerator(data_dir='../dataset/train', batch_size=20, train_ratio=0.8, band_opt=1, is_multi_resolution=True)
+    print(generator.getNumBatch(op='train'))
+    print(generator.getNumBatch(op='val'))
     imgs, masks_256, masks_128, masks_64, n_imgs = generator.getBatch(batch_num=1, is_aug=True, is_train=True)
     print(n_imgs, imgs.shape, masks_256.shape, masks_128.shape, masks_64.shape, type(imgs))
-    visualizeOneImg(imgs[1], op=0)     
-    # visualizeOneMask(masks_256[1]) 
-    visualizeOneMask(masks_128[1]) 
-    # visualizeOneMask(masks_64[1]) 
+    #visualizeOneImg(imgs[1], op=0)     
+    #visualizeOneMask(masks_256[1]) 
+    #visualizeOneMask(masks_128[1]) 
+    #visualizeOneMask(masks_64[1]) 
     del generator,masks_256,masks_128,masks_64,imgs
 
 

@@ -93,3 +93,10 @@ def postProcessingMultiAngle(y,y90,y180,y270):
     new_masks = tf.convert_to_tensor(new_masks)
 
     return tf.cast(new_masks, dtype=tf.float32)
+
+
+def postProcessingAll(masks_pred):
+  masks_pred = postProcessingPixelLevelThresholding(masks_pred, threshold=0.72)
+  masks_pred = postProcessingMorphology(masks_pred, op=1)
+
+  return masks_pred

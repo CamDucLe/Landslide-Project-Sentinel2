@@ -1,0 +1,1078 @@
+2023-09-15 20:41:28.489604: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-09-15 20:41:29.116021: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22843 MB memory:  -> device: 0, name: TITAN RTX, pci bus id: 0000:40:00.0, compute capability: 7.5
+Finished preparing dataset!
+Python version:  3.8.17
+Tensorflow version:  2.8.0
+Numpy version:  1.23.5 
+
+==== Test fold:  5  =====
+number of training images:  3040
+........ creating model ! .........
+ListWrapper([<losses.FocalLoss object at 0x7f54b01fea00>, <losses.IOULoss object at 0x7f54b01fe640>])
+<tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=0.0004>
+Model: "RNet"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, 128, 128, 2  0           []                               
+                                1)]                                                               
+                                                                                                  
+ conv2d (Conv2D)                (None, 128, 128, 12  24320       ['input_1[0][0]']                
+                                8)                                                                
+                                                                                                  
+ batch_normalization (BatchNorm  (None, 128, 128, 12  512        ['conv2d[0][0]']                 
+ alization)                     8)                                                                
+                                                                                                  
+ leaky_re_lu (LeakyReLU)        (None, 128, 128, 12  0           ['batch_normalization[0][0]']    
+                                8)                                                                
+                                                                                                  
+ conv2d_1 (Conv2D)              (None, 128, 128, 12  147584      ['leaky_re_lu[0][0]']            
+                                8)                                                                
+                                                                                                  
+ conv2d_2 (Conv2D)              (None, 128, 128, 12  65664       ['leaky_re_lu[0][0]']            
+                                8)                                                                
+                                                                                                  
+ batch_normalization_1 (BatchNo  (None, 128, 128, 12  512        ['conv2d_1[0][0]']               
+ rmalization)                   8)                                                                
+                                                                                                  
+ batch_normalization_2 (BatchNo  (None, 128, 128, 12  512        ['conv2d_2[0][0]']               
+ rmalization)                   8)                                                                
+                                                                                                  
+ leaky_re_lu_1 (LeakyReLU)      (None, 128, 128, 12  0           ['batch_normalization_1[0][0]']  
+                                8)                                                                
+                                                                                                  
+ leaky_re_lu_2 (LeakyReLU)      (None, 128, 128, 12  0           ['batch_normalization_2[0][0]']  
+                                8)                                                                
+                                                                                                  
+ tf.__operators__.add (TFOpLamb  (None, 128, 128, 12  0          ['leaky_re_lu_1[0][0]',          
+ da)                            8)                                'leaky_re_lu_2[0][0]']          
+                                                                                                  
+ conv2d_3 (Conv2D)              (None, 128, 128, 12  147584      ['tf.__operators__.add[0][0]']   
+                                8)                                                                
+                                                                                                  
+ batch_normalization_3 (BatchNo  (None, 128, 128, 12  512        ['conv2d_3[0][0]']               
+ rmalization)                   8)                                                                
+                                                                                                  
+ leaky_re_lu_3 (LeakyReLU)      (None, 128, 128, 12  0           ['batch_normalization_3[0][0]']  
+                                8)                                                                
+                                                                                                  
+ global_average_pooling2d (Glob  (None, 128)         0           ['leaky_re_lu_3[0][0]']          
+ alAveragePooling2D)                                                                              
+                                                                                                  
+ dense (Dense)                  (None, 64)           8256        ['global_average_pooling2d[0][0]'
+                                                                 ]                                
+                                                                                                  
+ dense_1 (Dense)                (None, 128)          8320        ['dense[0][0]']                  
+                                                                                                  
+ reshape (Reshape)              (None, 1, 1, 128)    0           ['dense_1[0][0]']                
+                                                                                                  
+ tf.math.multiply (TFOpLambda)  (None, 128, 128, 12  0           ['leaky_re_lu_3[0][0]',          
+                                8)                                'reshape[0][0]']                
+                                                                                                  
+ tf.__operators__.add_1 (TFOpLa  (None, 128, 128, 12  0          ['tf.math.multiply[0][0]',       
+ mbda)                          8)                                'leaky_re_lu[0][0]']            
+                                                                                                  
+ conv2d_4 (Conv2D)              (None, 64, 64, 128)  65664       ['tf.__operators__.add_1[0][0]'] 
+                                                                                                  
+ conv2d_5 (Conv2D)              (None, 64, 64, 128)  147584      ['conv2d_4[0][0]']               
+                                                                                                  
+ conv2d_6 (Conv2D)              (None, 64, 64, 128)  65664       ['conv2d_4[0][0]']               
+                                                                                                  
+ batch_normalization_4 (BatchNo  (None, 64, 64, 128)  512        ['conv2d_5[0][0]']               
+ rmalization)                                                                                     
+                                                                                                  
+ batch_normalization_5 (BatchNo  (None, 64, 64, 128)  512        ['conv2d_6[0][0]']               
+ rmalization)                                                                                     
+                                                                                                  
+ leaky_re_lu_4 (LeakyReLU)      (None, 64, 64, 128)  0           ['batch_normalization_4[0][0]']  
+                                                                                                  
+ leaky_re_lu_5 (LeakyReLU)      (None, 64, 64, 128)  0           ['batch_normalization_5[0][0]']  
+                                                                                                  
+ tf.__operators__.add_2 (TFOpLa  (None, 64, 64, 128)  0          ['leaky_re_lu_4[0][0]',          
+ mbda)                                                            'leaky_re_lu_5[0][0]']          
+                                                                                                  
+ conv2d_7 (Conv2D)              (None, 64, 64, 128)  147584      ['tf.__operators__.add_2[0][0]'] 
+                                                                                                  
+ batch_normalization_6 (BatchNo  (None, 64, 64, 128)  512        ['conv2d_7[0][0]']               
+ rmalization)                                                                                     
+                                                                                                  
+ leaky_re_lu_6 (LeakyReLU)      (None, 64, 64, 128)  0           ['batch_normalization_6[0][0]']  
+                                                                                                  
+ global_average_pooling2d_1 (Gl  (None, 128)         0           ['leaky_re_lu_6[0][0]']          
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_2 (Dense)                (None, 64)           8256        ['global_average_pooling2d_1[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_3 (Dense)                (None, 128)          8320        ['dense_2[0][0]']                
+                                                                                                  
+ reshape_1 (Reshape)            (None, 1, 1, 128)    0           ['dense_3[0][0]']                
+                                                                                                  
+ tf.math.multiply_1 (TFOpLambda  (None, 64, 64, 128)  0          ['leaky_re_lu_6[0][0]',          
+ )                                                                'reshape_1[0][0]']              
+                                                                                                  
+ tf.__operators__.add_3 (TFOpLa  (None, 64, 64, 128)  0          ['tf.math.multiply_1[0][0]',     
+ mbda)                                                            'conv2d_4[0][0]']               
+                                                                                                  
+ conv2d_8 (Conv2D)              (None, 32, 32, 128)  65664       ['tf.__operators__.add_3[0][0]'] 
+                                                                                                  
+ conv2d_9 (Conv2D)              (None, 32, 32, 128)  147584      ['conv2d_8[0][0]']               
+                                                                                                  
+ conv2d_10 (Conv2D)             (None, 32, 32, 128)  65664       ['conv2d_8[0][0]']               
+                                                                                                  
+ batch_normalization_7 (BatchNo  (None, 32, 32, 128)  512        ['conv2d_9[0][0]']               
+ rmalization)                                                                                     
+                                                                                                  
+ batch_normalization_8 (BatchNo  (None, 32, 32, 128)  512        ['conv2d_10[0][0]']              
+ rmalization)                                                                                     
+                                                                                                  
+ leaky_re_lu_7 (LeakyReLU)      (None, 32, 32, 128)  0           ['batch_normalization_7[0][0]']  
+                                                                                                  
+ leaky_re_lu_8 (LeakyReLU)      (None, 32, 32, 128)  0           ['batch_normalization_8[0][0]']  
+                                                                                                  
+ tf.__operators__.add_4 (TFOpLa  (None, 32, 32, 128)  0          ['leaky_re_lu_7[0][0]',          
+ mbda)                                                            'leaky_re_lu_8[0][0]']          
+                                                                                                  
+ conv2d_11 (Conv2D)             (None, 32, 32, 128)  147584      ['tf.__operators__.add_4[0][0]'] 
+                                                                                                  
+ batch_normalization_9 (BatchNo  (None, 32, 32, 128)  512        ['conv2d_11[0][0]']              
+ rmalization)                                                                                     
+                                                                                                  
+ leaky_re_lu_9 (LeakyReLU)      (None, 32, 32, 128)  0           ['batch_normalization_9[0][0]']  
+                                                                                                  
+ global_average_pooling2d_2 (Gl  (None, 128)         0           ['leaky_re_lu_9[0][0]']          
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_4 (Dense)                (None, 64)           8256        ['global_average_pooling2d_2[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_5 (Dense)                (None, 128)          8320        ['dense_4[0][0]']                
+                                                                                                  
+ reshape_2 (Reshape)            (None, 1, 1, 128)    0           ['dense_5[0][0]']                
+                                                                                                  
+ tf.math.multiply_2 (TFOpLambda  (None, 32, 32, 128)  0          ['leaky_re_lu_9[0][0]',          
+ )                                                                'reshape_2[0][0]']              
+                                                                                                  
+ tf.__operators__.add_5 (TFOpLa  (None, 32, 32, 128)  0          ['tf.math.multiply_2[0][0]',     
+ mbda)                                                            'conv2d_8[0][0]']               
+                                                                                                  
+ conv2d_12 (Conv2D)             (None, 16, 16, 128)  65664       ['tf.__operators__.add_5[0][0]'] 
+                                                                                                  
+ conv2d_13 (Conv2D)             (None, 16, 16, 128)  147584      ['conv2d_12[0][0]']              
+                                                                                                  
+ conv2d_14 (Conv2D)             (None, 16, 16, 128)  65664       ['conv2d_12[0][0]']              
+                                                                                                  
+ batch_normalization_10 (BatchN  (None, 16, 16, 128)  512        ['conv2d_13[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ batch_normalization_11 (BatchN  (None, 16, 16, 128)  512        ['conv2d_14[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_10 (LeakyReLU)     (None, 16, 16, 128)  0           ['batch_normalization_10[0][0]'] 
+                                                                                                  
+ leaky_re_lu_11 (LeakyReLU)     (None, 16, 16, 128)  0           ['batch_normalization_11[0][0]'] 
+                                                                                                  
+ tf.__operators__.add_6 (TFOpLa  (None, 16, 16, 128)  0          ['leaky_re_lu_10[0][0]',         
+ mbda)                                                            'leaky_re_lu_11[0][0]']         
+                                                                                                  
+ conv2d_15 (Conv2D)             (None, 16, 16, 128)  147584      ['tf.__operators__.add_6[0][0]'] 
+                                                                                                  
+ batch_normalization_12 (BatchN  (None, 16, 16, 128)  512        ['conv2d_15[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_12 (LeakyReLU)     (None, 16, 16, 128)  0           ['batch_normalization_12[0][0]'] 
+                                                                                                  
+ global_average_pooling2d_3 (Gl  (None, 128)         0           ['leaky_re_lu_12[0][0]']         
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_6 (Dense)                (None, 64)           8256        ['global_average_pooling2d_3[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_7 (Dense)                (None, 128)          8320        ['dense_6[0][0]']                
+                                                                                                  
+ reshape_3 (Reshape)            (None, 1, 1, 128)    0           ['dense_7[0][0]']                
+                                                                                                  
+ tf.math.multiply_3 (TFOpLambda  (None, 16, 16, 128)  0          ['leaky_re_lu_12[0][0]',         
+ )                                                                'reshape_3[0][0]']              
+                                                                                                  
+ tf.__operators__.add_7 (TFOpLa  (None, 16, 16, 128)  0          ['tf.math.multiply_3[0][0]',     
+ mbda)                                                            'conv2d_12[0][0]']              
+                                                                                                  
+ conv2d_16 (Conv2D)             (None, 8, 8, 128)    65664       ['tf.__operators__.add_7[0][0]'] 
+                                                                                                  
+ conv2d_transpose (Conv2DTransp  (None, 16, 16, 128)  65664      ['conv2d_16[0][0]']              
+ ose)                                                                                             
+                                                                                                  
+ concatenate (Concatenate)      (None, 16, 16, 256)  0           ['conv2d_transpose[0][0]',       
+                                                                  'tf.__operators__.add_7[0][0]'] 
+                                                                                                  
+ conv2d_20 (Conv2D)             (None, 16, 16, 256)  590080      ['concatenate[0][0]']            
+                                                                                                  
+ conv2d_21 (Conv2D)             (None, 16, 16, 256)  262400      ['concatenate[0][0]']            
+                                                                                                  
+ batch_normalization_16 (BatchN  (None, 16, 16, 256)  1024       ['conv2d_20[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ batch_normalization_17 (BatchN  (None, 16, 16, 256)  1024       ['conv2d_21[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_16 (LeakyReLU)     (None, 16, 16, 256)  0           ['batch_normalization_16[0][0]'] 
+                                                                                                  
+ leaky_re_lu_17 (LeakyReLU)     (None, 16, 16, 256)  0           ['batch_normalization_17[0][0]'] 
+                                                                                                  
+ tf.__operators__.add_10 (TFOpL  (None, 16, 16, 256)  0          ['leaky_re_lu_16[0][0]',         
+ ambda)                                                           'leaky_re_lu_17[0][0]']         
+                                                                                                  
+ conv2d_22 (Conv2D)             (None, 16, 16, 256)  590080      ['tf.__operators__.add_10[0][0]']
+                                                                                                  
+ batch_normalization_18 (BatchN  (None, 16, 16, 256)  1024       ['conv2d_22[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_18 (LeakyReLU)     (None, 16, 16, 256)  0           ['batch_normalization_18[0][0]'] 
+                                                                                                  
+ global_average_pooling2d_5 (Gl  (None, 256)         0           ['leaky_re_lu_18[0][0]']         
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_10 (Dense)               (None, 128)          32896       ['global_average_pooling2d_5[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_11 (Dense)               (None, 256)          33024       ['dense_10[0][0]']               
+                                                                                                  
+ reshape_5 (Reshape)            (None, 1, 1, 256)    0           ['dense_11[0][0]']               
+                                                                                                  
+ tf.math.multiply_5 (TFOpLambda  (None, 16, 16, 256)  0          ['leaky_re_lu_18[0][0]',         
+ )                                                                'reshape_5[0][0]']              
+                                                                                                  
+ tf.__operators__.add_11 (TFOpL  (None, 16, 16, 256)  0          ['tf.math.multiply_5[0][0]',     
+ ambda)                                                           'concatenate[0][0]']            
+                                                                                                  
+ conv2d_transpose_1 (Conv2DTran  (None, 32, 32, 256)  262400     ['tf.__operators__.add_11[0][0]']
+ spose)                                                                                           
+                                                                                                  
+ concatenate_1 (Concatenate)    (None, 32, 32, 384)  0           ['conv2d_transpose_1[0][0]',     
+                                                                  'tf.__operators__.add_5[0][0]'] 
+                                                                                                  
+ conv2d_23 (Conv2D)             (None, 32, 32, 384)  1327488     ['concatenate_1[0][0]']          
+                                                                                                  
+ conv2d_24 (Conv2D)             (None, 32, 32, 384)  590208      ['concatenate_1[0][0]']          
+                                                                                                  
+ batch_normalization_19 (BatchN  (None, 32, 32, 384)  1536       ['conv2d_23[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ batch_normalization_20 (BatchN  (None, 32, 32, 384)  1536       ['conv2d_24[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_19 (LeakyReLU)     (None, 32, 32, 384)  0           ['batch_normalization_19[0][0]'] 
+                                                                                                  
+ leaky_re_lu_20 (LeakyReLU)     (None, 32, 32, 384)  0           ['batch_normalization_20[0][0]'] 
+                                                                                                  
+ tf.__operators__.add_12 (TFOpL  (None, 32, 32, 384)  0          ['leaky_re_lu_19[0][0]',         
+ ambda)                                                           'leaky_re_lu_20[0][0]']         
+                                                                                                  
+ conv2d_25 (Conv2D)             (None, 32, 32, 384)  1327488     ['tf.__operators__.add_12[0][0]']
+                                                                                                  
+ batch_normalization_21 (BatchN  (None, 32, 32, 384)  1536       ['conv2d_25[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_21 (LeakyReLU)     (None, 32, 32, 384)  0           ['batch_normalization_21[0][0]'] 
+                                                                                                  
+ global_average_pooling2d_6 (Gl  (None, 384)         0           ['leaky_re_lu_21[0][0]']         
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_12 (Dense)               (None, 192)          73920       ['global_average_pooling2d_6[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_13 (Dense)               (None, 384)          74112       ['dense_12[0][0]']               
+                                                                                                  
+ reshape_6 (Reshape)            (None, 1, 1, 384)    0           ['dense_13[0][0]']               
+                                                                                                  
+ tf.math.multiply_6 (TFOpLambda  (None, 32, 32, 384)  0          ['leaky_re_lu_21[0][0]',         
+ )                                                                'reshape_6[0][0]']              
+                                                                                                  
+ tf.__operators__.add_13 (TFOpL  (None, 32, 32, 384)  0          ['tf.math.multiply_6[0][0]',     
+ ambda)                                                           'concatenate_1[0][0]']          
+                                                                                                  
+ conv2d_transpose_2 (Conv2DTran  (None, 64, 64, 384)  590208     ['tf.__operators__.add_13[0][0]']
+ spose)                                                                                           
+                                                                                                  
+ concatenate_2 (Concatenate)    (None, 64, 64, 512)  0           ['conv2d_transpose_2[0][0]',     
+                                                                  'tf.__operators__.add_3[0][0]'] 
+                                                                                                  
+ conv2d_26 (Conv2D)             (None, 64, 64, 512)  2359808     ['concatenate_2[0][0]']          
+                                                                                                  
+ conv2d_27 (Conv2D)             (None, 64, 64, 512)  1049088     ['concatenate_2[0][0]']          
+                                                                                                  
+ batch_normalization_22 (BatchN  (None, 64, 64, 512)  2048       ['conv2d_26[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ batch_normalization_23 (BatchN  (None, 64, 64, 512)  2048       ['conv2d_27[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_22 (LeakyReLU)     (None, 64, 64, 512)  0           ['batch_normalization_22[0][0]'] 
+                                                                                                  
+ leaky_re_lu_23 (LeakyReLU)     (None, 64, 64, 512)  0           ['batch_normalization_23[0][0]'] 
+                                                                                                  
+ tf.__operators__.add_14 (TFOpL  (None, 64, 64, 512)  0          ['leaky_re_lu_22[0][0]',         
+ ambda)                                                           'leaky_re_lu_23[0][0]']         
+                                                                                                  
+ conv2d_28 (Conv2D)             (None, 64, 64, 512)  2359808     ['tf.__operators__.add_14[0][0]']
+                                                                                                  
+ batch_normalization_24 (BatchN  (None, 64, 64, 512)  2048       ['conv2d_28[0][0]']              
+ ormalization)                                                                                    
+                                                                                                  
+ leaky_re_lu_24 (LeakyReLU)     (None, 64, 64, 512)  0           ['batch_normalization_24[0][0]'] 
+                                                                                                  
+ global_average_pooling2d_7 (Gl  (None, 512)         0           ['leaky_re_lu_24[0][0]']         
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_14 (Dense)               (None, 256)          131328      ['global_average_pooling2d_7[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_15 (Dense)               (None, 512)          131584      ['dense_14[0][0]']               
+                                                                                                  
+ reshape_7 (Reshape)            (None, 1, 1, 512)    0           ['dense_15[0][0]']               
+                                                                                                  
+ tf.math.multiply_7 (TFOpLambda  (None, 64, 64, 512)  0          ['leaky_re_lu_24[0][0]',         
+ )                                                                'reshape_7[0][0]']              
+                                                                                                  
+ tf.__operators__.add_15 (TFOpL  (None, 64, 64, 512)  0          ['tf.math.multiply_7[0][0]',     
+ ambda)                                                           'concatenate_2[0][0]']          
+                                                                                                  
+ conv2d_transpose_3 (Conv2DTran  (None, 128, 128, 51  1049088    ['tf.__operators__.add_15[0][0]']
+ spose)                         2)                                                                
+                                                                                                  
+ concatenate_3 (Concatenate)    (None, 128, 128, 64  0           ['conv2d_transpose_3[0][0]',     
+                                0)                                'tf.__operators__.add_1[0][0]'] 
+                                                                                                  
+ conv2d_29 (Conv2D)             (None, 128, 128, 64  3687040     ['concatenate_3[0][0]']          
+                                0)                                                                
+                                                                                                  
+ conv2d_30 (Conv2D)             (None, 128, 128, 64  1639040     ['concatenate_3[0][0]']          
+                                0)                                                                
+                                                                                                  
+ batch_normalization_25 (BatchN  (None, 128, 128, 64  2560       ['conv2d_29[0][0]']              
+ ormalization)                  0)                                                                
+                                                                                                  
+ batch_normalization_26 (BatchN  (None, 128, 128, 64  2560       ['conv2d_30[0][0]']              
+ ormalization)                  0)                                                                
+                                                                                                  
+ leaky_re_lu_25 (LeakyReLU)     (None, 128, 128, 64  0           ['batch_normalization_25[0][0]'] 
+                                0)                                                                
+                                                                                                  
+ leaky_re_lu_26 (LeakyReLU)     (None, 128, 128, 64  0           ['batch_normalization_26[0][0]'] 
+                                0)                                                                
+                                                                                                  
+ tf.__operators__.add_16 (TFOpL  (None, 128, 128, 64  0          ['leaky_re_lu_25[0][0]',         
+ ambda)                         0)                                'leaky_re_lu_26[0][0]']         
+                                                                                                  
+ conv2d_31 (Conv2D)             (None, 128, 128, 64  3687040     ['tf.__operators__.add_16[0][0]']
+                                0)                                                                
+                                                                                                  
+ batch_normalization_27 (BatchN  (None, 128, 128, 64  2560       ['conv2d_31[0][0]']              
+ ormalization)                  0)                                                                
+                                                                                                  
+ leaky_re_lu_27 (LeakyReLU)     (None, 128, 128, 64  0           ['batch_normalization_27[0][0]'] 
+                                0)                                                                
+                                                                                                  
+ global_average_pooling2d_8 (Gl  (None, 640)         0           ['leaky_re_lu_27[0][0]']         
+ obalAveragePooling2D)                                                                            
+                                                                                                  
+ dense_16 (Dense)               (None, 320)          205120      ['global_average_pooling2d_8[0][0
+                                                                 ]']                              
+                                                                                                  
+ dense_17 (Dense)               (None, 640)          205440      ['dense_16[0][0]']               
+                                                                                                  
+ reshape_8 (Reshape)            (None, 1, 1, 640)    0           ['dense_17[0][0]']               
+                                                                                                  
+ tf.math.multiply_8 (TFOpLambda  (None, 128, 128, 64  0          ['leaky_re_lu_27[0][0]',         
+ )                              0)                                'reshape_8[0][0]']              
+                                                                                                  
+ tf.__operators__.add_17 (TFOpL  (None, 128, 128, 64  0          ['tf.math.multiply_8[0][0]',     
+ ambda)                         0)                                'concatenate_3[0][0]']          
+                                                                                                  
+ dropout (Dropout)              (None, 128, 128, 64  0           ['tf.__operators__.add_17[0][0]']
+                                0)                                                                
+                                                                                                  
+ conv2d_transpose_4 (Conv2DTran  (None, 256, 256, 64  368704     ['dropout[0][0]']                
+ spose)                         )                                                                 
+                                                                                                  
+ conv2d_32 (Conv2D)             (None, 64, 64, 64)   368704      ['dropout[0][0]']                
+                                                                                                  
+ conv2d_33 (Conv2D)             (None, 256, 256, 2)  130         ['conv2d_transpose_4[0][0]']     
+                                                                                                  
+ conv2d_34 (Conv2D)             (None, 128, 128, 2)  1282        ['dropout[0][0]']                
+                                                                                                  
+ conv2d_35 (Conv2D)             (None, 64, 64, 2)    130         ['conv2d_32[0][0]']              
+                                                                                                  
+==================================================================================================
+Total params: 24,888,070
+Trainable params: 24,873,990
+Non-trainable params: 14,080
+__________________________________________________________________________________________________
+2023-09-15 20:41:31.172720: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+### START TRAINING PROCESS ###
+batch train:  254 4
+batch test:  64 3
+
+
+ ==================== Epoch  0 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+
+
+ ==================== Epoch  1 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.67599416 ; Test F1:  0.76984847 ; Test Accuracy:  0.9667028696012434   and Testing Time :  0:00:31.977679
+...... Save model completed ......
+
+
+ ==================== Epoch  2 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6772686 ; Test F1:  0.7717422 ; Test Accuracy:  0.9646137624547102   and Testing Time :  0:00:28.802969
+...... Save model completed ......
+
+
+ ==================== Epoch  3 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6667695 ; Test F1:  0.75887644 ; Test Accuracy:  0.9709305392580698   and Testing Time :  0:00:29.328000
+
+
+ ==================== Epoch  4 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6775167 ; Test F1:  0.7702465 ; Test Accuracy:  0.9710446484632329   and Testing Time :  0:00:29.299121
+...... Save model completed ......
+
+
+ ==================== Epoch  5 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6914433 ; Test F1:  0.7844753 ; Test Accuracy:  0.9711676837584404   and Testing Time :  0:00:29.113527
+...... Save model completed ......
+
+
+ ==================== Epoch  6 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6725435 ; Test F1:  0.7654509 ; Test Accuracy:  0.9694932779304595   and Testing Time :  0:00:29.506579
+
+
+ ==================== Epoch  7 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-04>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.67727023 ; Test F1:  0.7702335 ; Test Accuracy:  0.9701548539916831   and Testing Time :  0:00:29.877928
+
+
+ ==================== Epoch  8 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6731317 ; Test F1:  0.7662233 ; Test Accuracy:  0.9689539330121871   and Testing Time :  0:00:30.254007
+
+
+ ==================== Epoch  9 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6527375 ; Test F1:  0.7423935 ; Test Accuracy:  0.9742491147891963   and Testing Time :  0:00:30.825377
+
+
+ ==================== Epoch  10 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6810622 ; Test F1:  0.7746233 ; Test Accuracy:  0.9684678229732789   and Testing Time :  0:00:30.692225
+
+
+ ==================== Epoch  11 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.67551833 ; Test F1:  0.76926666 ; Test Accuracy:  0.9670134332026104   and Testing Time :  0:00:30.659926
+
+
+ ==================== Epoch  12 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.6886538 ; Test F1:  0.7819436 ; Test Accuracy:  0.9700848927453887   and Testing Time :  0:00:30.471882
+
+
+ ==================== Epoch  13 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.68628 ; Test F1:  0.77870476 ; Test Accuracy:  0.9732587208703887   and Testing Time :  0:00:30.541387
+
+
+ ==================== Epoch  14 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.69818264 ; Test F1:  0.79041326 ; Test Accuracy:  0.9742705856544384   and Testing Time :  0:00:30.609701
+...... Save model completed ......
+
+
+ ==================== Epoch  15 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.70710015 ; Test F1:  0.79804265 ; Test Accuracy:  0.9788499915081522   and Testing Time :  0:00:31.157995
+...... Save model completed ......
+
+
+ ==================== Epoch  16 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.71574247 ; Test F1:  0.8062798 ; Test Accuracy:  0.9790901917870966   and Testing Time :  0:00:31.217852
+...... Save model completed ......
+
+
+ ==================== Epoch  17 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7055928 ; Test F1:  0.7965445 ; Test Accuracy:  0.9789813095715991   and Testing Time :  0:00:31.209202
+
+
+ ==================== Epoch  18 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7237687 ; Test F1:  0.81378484 ; Test Accuracy:  0.979196259469697   and Testing Time :  0:00:30.972099
+...... Save model completed ......
+
+
+ ==================== Epoch  19 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7102164 ; Test F1:  0.80097044 ; Test Accuracy:  0.9792127445909503   and Testing Time :  0:00:31.002091
+
+
+ ==================== Epoch  20 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7162463 ; Test F1:  0.8064241 ; Test Accuracy:  0.9805625945683053   and Testing Time :  0:00:30.996126
+
+
+ ==================== Epoch  21 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.72539383 ; Test F1:  0.8150668 ; Test Accuracy:  0.9802333746345933   and Testing Time :  0:00:30.902888
+...... Save model completed ......
+
+
+ ==================== Epoch  22 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7223234 ; Test F1:  0.81217283 ; Test Accuracy:  0.9804246020411315   and Testing Time :  0:00:31.064116
+
+
+ ==================== Epoch  23 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7296221 ; Test F1:  0.8187808 ; Test Accuracy:  0.9810654309741436   and Testing Time :  0:00:30.927468
+...... Save model completed ......
+
+
+ ==================== Epoch  24 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-05>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7310089 ; Test F1:  0.82018566 ; Test Accuracy:  0.9804042569890481   and Testing Time :  0:00:30.777191
+...... Save model completed ......
+
+
+ ==================== Epoch  25 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.73406976 ; Test F1:  0.8227077 ; Test Accuracy:  0.9816543116714015   and Testing Time :  0:00:30.901764
+...... Save model completed ......
+
+
+ ==================== Epoch  26 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.73281616 ; Test F1:  0.82166064 ; Test Accuracy:  0.981219426131217   and Testing Time :  0:00:30.848230
+
+
+ ==================== Epoch  27 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7382673 ; Test F1:  0.82668376 ; Test Accuracy:  0.9806644806591732   and Testing Time :  0:00:30.905206
+...... Save model completed ......
+
+
+ ==================== Epoch  28 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7358297 ; Test F1:  0.8243209 ; Test Accuracy:  0.9815361012897316   and Testing Time :  0:00:31.119607
+
+
+ ==================== Epoch  29 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.73921305 ; Test F1:  0.8275343 ; Test Accuracy:  0.9806331187211792   and Testing Time :  0:00:30.880385
+...... Save model completed ......
+
+
+ ==================== Epoch  30 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74393475 ; Test F1:  0.8315418 ; Test Accuracy:  0.9815459119472579   and Testing Time :  0:00:30.631334
+...... Save model completed ......
+
+
+ ==================== Epoch  31 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7462234 ; Test F1:  0.8334632 ; Test Accuracy:  0.9820180297369071   and Testing Time :  0:00:30.919619
+...... Save model completed ......
+
+
+ ==================== Epoch  32 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.743135 ; Test F1:  0.8308674 ; Test Accuracy:  0.9813838752676218   and Testing Time :  0:00:30.451547
+
+
+ ==================== Epoch  33 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7435432 ; Test F1:  0.83127904 ; Test Accuracy:  0.981119067929636   and Testing Time :  0:00:30.913997
+
+
+ ==================== Epoch  34 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=2e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7447232 ; Test F1:  0.8322544 ; Test Accuracy:  0.9814501374135376   and Testing Time :  0:00:30.676213
+
+
+ ==================== Epoch  35 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74570894 ; Test F1:  0.8330396 ; Test Accuracy:  0.9818726390089756   and Testing Time :  0:00:30.613745
+
+
+ ==================== Epoch  36 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74543035 ; Test F1:  0.8327671 ; Test Accuracy:  0.9820185926434865   and Testing Time :  0:00:30.468491
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74589634 ; Test F1:  0.83326036 ; Test Accuracy:  0.9815782388679595   and Testing Time :  0:00:30.581443
+
+
+ ==================== Epoch  37 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74617654 ; Test F1:  0.8334162 ; Test Accuracy:  0.9820486679378706   and Testing Time :  0:00:30.465894
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74679124 ; Test F1:  0.83403194 ; Test Accuracy:  0.9816436164463933   and Testing Time :  0:00:30.728211
+...... Save model completed ......
+
+
+ ==================== Epoch  38 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7478835 ; Test F1:  0.8348595 ; Test Accuracy:  0.9823142794281127   and Testing Time :  0:00:31.106752
+...... Save model completed ......
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74672586 ; Test F1:  0.8339693 ; Test Accuracy:  0.9816722442667161   and Testing Time :  0:00:30.954916
+
+
+ ==================== Epoch  39 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7473757 ; Test F1:  0.8344452 ; Test Accuracy:  0.9821596409492341   and Testing Time :  0:00:31.456503
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74803245 ; Test F1:  0.8350593 ; Test Accuracy:  0.9819459776947463   and Testing Time :  0:00:31.314797
+...... Save model completed ......
+
+
+ ==================== Epoch  40 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7477264 ; Test F1:  0.8347151 ; Test Accuracy:  0.9823520745841567   and Testing Time :  0:00:30.937329
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7442018 ; Test F1:  0.8317361 ; Test Accuracy:  0.9817584493885869   and Testing Time :  0:00:31.009858
+
+
+ ==================== Epoch  41 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-06>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7447535 ; Test F1:  0.8321393 ; Test Accuracy:  0.9821874646173008   and Testing Time :  0:00:31.257675
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7465652 ; Test F1:  0.83383137 ; Test Accuracy:  0.9816578499413291   and Testing Time :  0:00:31.074294
+
+
+ ==================== Epoch  42 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74596256 ; Test F1:  0.8331703 ; Test Accuracy:  0.9823527983211874   and Testing Time :  0:00:30.970426
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7466989 ; Test F1:  0.8338984 ; Test Accuracy:  0.9819208077291255   and Testing Time :  0:00:30.925940
+
+
+ ==================== Epoch  43 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74574846 ; Test F1:  0.83299685 ; Test Accuracy:  0.9822784946527091   and Testing Time :  0:00:30.934656
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74788475 ; Test F1:  0.8349553 ; Test Accuracy:  0.9818138554790431   and Testing Time :  0:00:30.936173
+
+
+ ==================== Epoch  44 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74691784 ; Test F1:  0.8340051 ; Test Accuracy:  0.9823673534770256   and Testing Time :  0:00:30.405428
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7465317 ; Test F1:  0.8337931 ; Test Accuracy:  0.9817048928483202   and Testing Time :  0:00:30.903119
+
+
+ ==================== Epoch  45 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74554884 ; Test F1:  0.8328176 ; Test Accuracy:  0.9822983572134387   and Testing Time :  0:00:30.569760
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74625003 ; Test F1:  0.833537 ; Test Accuracy:  0.9817538657207263   and Testing Time :  0:00:30.957115
+
+
+ ==================== Epoch  46 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74561656 ; Test F1:  0.83287853 ; Test Accuracy:  0.9822904765213274   and Testing Time :  0:00:30.561377
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74560887 ; Test F1:  0.8329927 ; Test Accuracy:  0.9816590561697134   and Testing Time :  0:00:30.953357
+
+
+ ==================== Epoch  47 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74606687 ; Test F1:  0.83323896 ; Test Accuracy:  0.9824728582530468   and Testing Time :  0:00:29.874871
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74692845 ; Test F1:  0.83410686 ; Test Accuracy:  0.981881163022892   and Testing Time :  0:00:30.802103
+
+
+ ==================== Epoch  48 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74593234 ; Test F1:  0.8331572 ; Test Accuracy:  0.9822830783205698   and Testing Time :  0:00:29.910866
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7492124 ; Test F1:  0.8360745 ; Test Accuracy:  0.9820128027472415   and Testing Time :  0:00:31.101342
+...... Save model completed ......
+
+
+ ==================== Epoch  49 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=5e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7482736 ; Test F1:  0.83517706 ; Test Accuracy:  0.9824365105710638   and Testing Time :  0:00:29.789279
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7474099 ; Test F1:  0.8345197 ; Test Accuracy:  0.9819239439229249   and Testing Time :  0:00:30.746000
+
+
+ ==================== Epoch  50 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7474315 ; Test F1:  0.8344704 ; Test Accuracy:  0.9822843649641798   and Testing Time :  0:00:29.219455
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7470008 ; Test F1:  0.83411825 ; Test Accuracy:  0.9821545747900198   and Testing Time :  0:00:30.886467
+
+
+ ==================== Epoch  51 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7466035 ; Test F1:  0.83372855 ; Test Accuracy:  0.9823737062798501   and Testing Time :  0:00:29.441527
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74700546 ; Test F1:  0.83411133 ; Test Accuracy:  0.9822128758285985   and Testing Time :  0:00:31.008425
+
+
+ ==================== Epoch  52 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7465497 ; Test F1:  0.83368623 ; Test Accuracy:  0.9823481342381011   and Testing Time :  0:00:29.225116
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7468383 ; Test F1:  0.8339629 ; Test Accuracy:  0.9822218823338685   and Testing Time :  0:00:30.933865
+
+
+ ==================== Epoch  53 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7462944 ; Test F1:  0.8334582 ; Test Accuracy:  0.9823709721621788   and Testing Time :  0:00:29.231854
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7471459 ; Test F1:  0.83422536 ; Test Accuracy:  0.9822589537528821   and Testing Time :  0:00:30.974051
+
+
+ ==================== Epoch  54 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74658704 ; Test F1:  0.8337109 ; Test Accuracy:  0.9823900305706522   and Testing Time :  0:00:29.328896
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7471743 ; Test F1:  0.8342562 ; Test Accuracy:  0.9822275918148881   and Testing Time :  0:00:31.053577
+
+
+ ==================== Epoch  55 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7468376 ; Test F1:  0.83393836 ; Test Accuracy:  0.9823487775599061   and Testing Time :  0:00:29.753042
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74739325 ; Test F1:  0.8344449 ; Test Accuracy:  0.9822423078011775   and Testing Time :  0:00:31.007216
+
+
+ ==================== Epoch  56 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74688125 ; Test F1:  0.83396745 ; Test Accuracy:  0.9823974287714098   and Testing Time :  0:00:30.189725
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7473029 ; Test F1:  0.8343539 ; Test Accuracy:  0.9823054337532938   and Testing Time :  0:00:31.143242
+
+
+ ==================== Epoch  57 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74697375 ; Test F1:  0.8340471 ; Test Accuracy:  0.9824039424046854   and Testing Time :  0:00:30.674971
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7469466 ; Test F1:  0.83405316 ; Test Accuracy:  0.9822474543756176   and Testing Time :  0:00:31.084185
+
+
+ ==================== Epoch  58 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7465364 ; Test F1:  0.8336711 ; Test Accuracy:  0.982366870985672   and Testing Time :  0:00:31.009087
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7471354 ; Test F1:  0.83422184 ; Test Accuracy:  0.9822292001194005   and Testing Time :  0:00:30.925119
+
+
+ ==================== Epoch  59 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7467465 ; Test F1:  0.83385146 ; Test Accuracy:  0.9823865727159503   and Testing Time :  0:00:31.150078
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.747188 ; Test F1:  0.834265 ; Test Accuracy:  0.9822440769361414   and Testing Time :  0:00:31.133559
+
+
+ ==================== Epoch  60 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74678874 ; Test F1:  0.83389497 ; Test Accuracy:  0.9823520745841567   and Testing Time :  0:00:31.011256
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74689347 ; Test F1:  0.8340152 ; Test Accuracy:  0.9822025022644928   and Testing Time :  0:00:30.979463
+
+
+ ==================== Epoch  61 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74930227 ; Test F1:  0.8361902 ; Test Accuracy:  0.9818122471745306   and Testing Time :  0:00:30.829950
+...... Save model completed ......
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7472602 ; Test F1:  0.83441794 ; Test Accuracy:  0.9817710745790103   and Testing Time :  0:00:30.894265
+
+
+ ==================== Epoch  62 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7465177 ; Test F1:  0.8337847 ; Test Accuracy:  0.9816842261353343   and Testing Time :  0:00:31.361487
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7456932 ; Test F1:  0.83306146 ; Test Accuracy:  0.9816874427443594   and Testing Time :  0:00:29.871198
+
+
+ ==================== Epoch  63 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7451719 ; Test F1:  0.832616 ; Test Accuracy:  0.9816227084877306   and Testing Time :  0:00:31.248494
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7446301 ; Test F1:  0.8321385 ; Test Accuracy:  0.9816278550621707   and Testing Time :  0:00:29.741621
+
+
+ ==================== Epoch  64 ======================
+ *** learning rate:  <tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+-------- training ---------
+........  50% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.7442886 ; Test F1:  0.83184713 ; Test Accuracy:  0.9815800884181489   and Testing Time :  0:00:31.207511
+........  100% ..........
+------ testing -------
+>>>>> Test MeanIOU:  0.74383456 ; Test F1:  0.8314462 ; Test Accuracy:  0.981583305027174   and Testing Time :  0:00:29.508073

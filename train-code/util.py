@@ -281,49 +281,68 @@ def addGradient(multispectral_img):
   return multispectral_img
 
 
-def findLandslideImage(data_dir, split_ratio=0.8):
-  """
-      # find the list of masks in training set that consist of land slide area
-      # input:
-        - data_dir: training directory
-        - split_ratio: train ratio
-      # output:
-        - a list of masks with landsliding
-        - a list of relative images
-  """
-  images_dir  = data_dir + '/img/'
-  masks_dir   = data_dir + '/mask/'
+def findLandslideImage(data_dir, test_fold=1):
+    """
+        # find the list of masks in training set that consist of land slide area
+        # input:
+            - data_dir: training directory
+            - split_ratio: train ratio
+        # output:
+            - a list of masks with landsliding
+            - a list of relative images
+    """
+  
+    images_dir  = data_dir + '/img/'
+    masks_dir   = data_dir + '/mask/'
 
-  n_img_train = math.ceil( len(os.listdir(masks_dir)) * split_ratio )
-  print("number of training images: ",n_img_train)
+    n_img = len(os.listdir(masks_dir))
+    #n_img_train = math.ceil( len(os.listdir(masks_dir)) * split_ratio )
+    #print("number of training images: ",n_img_train)
 
-  mask_list   = os.listdir(masks_dir)
-  mask_list   = natsorted(mask_list)
-  image_list  = os.listdir(images_dir)
-  image_list  = natsorted(image_list)
+    mask_list   = os.listdir(masks_dir)
+    mask_list   = natsorted(mask_list)
+    image_list  = os.listdir(images_dir)
+    image_list  = natsorted(image_list)
+    
 
-  mask_list   = mask_list[:n_img_train]
-  image_list  = image_list[:n_img_train]
+    if test_fold == 1:
+        mask_list   = mask_list[:int(n_img*0.8)] + mask_list[int(n_img*1):]
+        image_list  = image_list[:int(n_img*0.8)] + image_list[int(n_img*1):]
+    elif test_fold == 2:
+        mask_list   = mask_list[:int(n_img*0.6)] + mask_list[int(n_img*0.8):]
+        image_list  = image_list[:int(n_img*0.6)] + image_list[int(n_img*0.8):]
+    elif test_fold == 3:
+        mask_list   = mask_list[:int(n_img*0.4)] + mask_list[int(n_img*0.6):]
+        image_list  = image_list[:int(n_img*0.4)] + image_list[int(n_img*0.6):]
+    elif test_fold == 4:
+        mask_list   = mask_list[:int(n_img*0.2)] + mask_list[int(n_img*0.4):]
+        image_list  = image_list[:int(n_img*0.2)] + image_list[int(n_img*0.4):]
+    elif test_fold == 5:
+        mask_list   = mask_list[:int(n_img*0.0)] + mask_list[int(n_img*0.2):]
+        image_list  = image_list[:int(n_img*0.0)] + image_list[int(n_img*0.2):]
 
-  landslide_mask  = []
-  landslide_image = []
+    n_img_train = len(mask_list)
+    print("number of training images: ",n_img_train)
 
-  for i in range(n_img_train):
-    image_name = image_list[i]
-    mask_name  = mask_list[i]
-    mask_open  = os.path.join(masks_dir, mask_name)
+    landslide_mask  = []
+    landslide_image = []
 
-    # load mask
-    f_mask     = h5py.File(mask_open, 'r')
-    one_mask   = f_mask[list(f_mask.keys())[0]]
-    one_mask   = np.asarray(one_mask) # (128,128)
-    f_mask.close()
+    for i in range(n_img_train):
+        image_name = image_list[i]
+        mask_name  = mask_list[i]
+        mask_open  = os.path.join(masks_dir, mask_name)
 
-    if (np.sum(one_mask)) != 0:
-      landslide_mask.append(mask_name)
-      landslide_image.append(image_name)
+        ## load mask
+        f_mask     = h5py.File(mask_open, 'r')
+        one_mask   = f_mask[list(f_mask.keys())[0]]
+        one_mask   = np.asarray(one_mask) # (128,128)
+        f_mask.close()
 
-  return landslide_mask, landslide_image
+        if (np.sum(one_mask)) != 0:
+            landslide_mask.append(mask_name)
+            landslide_image.append(image_name)
+
+    return landslide_mask, landslide_image
 
 
 def init_argparse():

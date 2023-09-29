@@ -20,7 +20,7 @@ def calculteMetricTest(y_true_test, y_pred_test, test_acc, AandB_test, AorB_test
 
 def doPostProcessing(x_test, y_pred_test, model, is_post_processing):
     if is_post_processing == 1:
-        y_pred_test_1 = postProcessingPixelLevelThresholding(y_pred_test[1], threshold=0.75) # apply thresholding
+        y_pred_test_1 = postProcessingPixelLevelThresholding(y_pred_test[1], threshold=0.35) # apply thresholding
     
     elif is_post_processing == 2:
         y_pred_test_1 = postProcessingMorphology(y_pred_test[1], op=1) # apply morphology (remove pepper/salt noise)
@@ -86,8 +86,9 @@ def testModel(model, generator, best_model_file, stored_dir,  old_test_f1, old_t
     test_acc /= n_test_imgs*128*128
     test_f1   = calculateF1(AandB_test, AorB_test)
     test_miou = calculateMIOU(intersection_test, union_test)
-    with open(os.path.join(stored_dir,"train_log.txt"), "a") as text_file:
-        text_file.write(">>>>> Test Scores >>> test_miou: {}; test_f1: {}; test Acc: {}; test_time: {} ---\n\n".format(test_miou, test_f1, test_acc, datetime.now()-start_test))
+    if test_only == False:
+        with open(os.path.join(stored_dir,"train_log.txt"), "a") as text_file:
+            text_file.write(">>>>> Test Scores >>> test_miou: {}; test_f1: {}; test Acc: {}; test_time: {} ---\n\n".format(test_miou, test_f1, test_acc, datetime.now()-start_test))
     print('>>>>> Test MeanIOU: ', test_miou, '; Test F1: ', test_f1, '; Test Accuracy: ', test_acc, '  and Testing Time : ', datetime.now()-start_test)
 
     ## Save model when successfully testing

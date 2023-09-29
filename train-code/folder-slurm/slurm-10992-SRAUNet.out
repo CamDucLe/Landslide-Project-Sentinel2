@@ -1,0 +1,17 @@
+2023-09-05 12:54:58.090527: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-09-05 12:54:58.873617: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22843 MB memory:  -> device: 0, name: TITAN RTX, pci bus id: 0000:40:00.0, compute capability: 7.5
+2023-09-05 12:55:01.211953: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+Finished preparing dataset!
+Python version:  3.8.17
+Tensorflow version:  2.8.0
+Numpy version:  1.23.5 
+
+number of training images:  3040
+........ loading model ! ........
+ListWrapper([<losses.FocalLoss object at 0x7f19c00a1820>, <losses.IOULoss object at 0x7f19c3519cd0>])
+<tf.Variable 'learning_rate:0' shape=() dtype=float32, numpy=1e-07>
+------ testing -------
+>>>>> Test MeanIOU:  0.6238718 ; Test F1:  0.7044797 ; Test Accuracy:  0.9845908344655797   and Testing Time :  0:00:22.416802
+Test F1:  0.7044797
+Test MIOU:  0.6238718

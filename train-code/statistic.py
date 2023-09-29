@@ -53,6 +53,36 @@ def checkPixelValueRange(data_dir, op):
     return
 
 
+def landslideStatistic(data_dir):
+    images_dir  = data_dir + '/img/'
+    masks_dir   = data_dir + '/mask/'
+
+    n_img_train = len(os.listdir(masks_dir)) 
+    print("number of training images: ",n_img_train)
+
+    mask_list   = os.listdir(masks_dir)
+    mask_list   = natsorted(mask_list)
+
+    landslide_image = 0
+    landslide_percent = 0
+    for i in range(n_img_train):
+        mask_name  = mask_list[i]
+        mask_open  = os.path.join(masks_dir, mask_name)
+
+        # load mask
+        f_mask     = h5py.File(mask_open, 'r')
+        one_mask   = f_mask[list(f_mask.keys())[0]]
+        one_mask   = np.asarray(one_mask) # (128,128)
+        f_mask.close()
+
+        if (np.sum(one_mask)) != 0:
+            landslide_image += 1
+            landslide_percent += np.sum(one_mask)
+
+    print("number of images contatain landslide and percentage: ", landslide_image, " -- ", landslide_image / n_img_train * 100, " %")
+    print("percentage of sliding region: ", landslide_percent / (128*128*n_img_train) * 100, ' %')
+
+    return 
 
 if __name__ == '__main__':
     checkPixelValueRange(data_dir='../dataset/train/img/', op="TRAIN")
@@ -61,3 +91,4 @@ if __name__ == '__main__':
     print('\n\n')
     checkPixelValueRange(data_dir='../dataset/test/img/', op="TEST")
     print('\n\n')
+    landslideStatistic("../dataset/train")

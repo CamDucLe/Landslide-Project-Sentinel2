@@ -12,8 +12,8 @@ import numpy as np
 #from D_Net import *
 #from R_Net import *
 #from SR_Net import *
-from SRA_Net import *
-#from RA_Net import *
+#from SRA_Net import *
+from RA_Net import *
 from losses import *
 
 def loadModel(model_path):

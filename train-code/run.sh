@@ -18,4 +18,4 @@ export PATH="/usr/lib/x86_64-linux-gnu/:$PATH"
 
 
 ##---
-python3 main.py --is_train 0 --stored_folder 20-mono-f-i-23-RANet-multi-best --batch_size 12 --is_multi_res 1
+# python3 main.py --is_train 1 --stored_folder <folder-name> --batch_size <batch-size> --is_multi_res 1

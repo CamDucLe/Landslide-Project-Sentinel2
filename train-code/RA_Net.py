@@ -110,11 +110,11 @@ def getRNet(input_shape=(128,128,23), num_classes=2, dropout_ratio=0.25):
 
 ## create full model
 def getModel(pre_trained_model=None):
-    network = getRNet(input_shape=(128,128,23))
+    network = getRNet(input_shape=(128,128,21))
     if pre_trained_model is not None:
         model.set_weights(pre_trained_model.get_weights())
     network.trainable = True
-    opt = tf.keras.optimizers.Adagrad(learning_rate=4e-4)
+    opt = tf.keras.optimizers.Adam(learning_rate=4e-4)
     network.compile(loss=[FocalLoss(), IOULoss()], optimizer=opt, metrics=[])
     
     return network
