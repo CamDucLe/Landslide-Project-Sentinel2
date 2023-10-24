@@ -1,0 +1,8 @@
+pandas==1.5.3
+natsort
+matplotlib
+seaborn
+pyarrow==9.0.0 
+scikit-learn
+numpy
+psutil

@@ -1,0 +1,873 @@
+Number of Features (columns) in dataframe:  44
+
+
+ =====  Feature  0 :  aspect_arctan2  =====
+RAM % used: 3.6
+RAM Used (GB): 16.05890048
+RAM % used: 3.8
+RAM Used (GB): 17.264295936
+Data type:  float64
+Number of records:  57842689
+       aspect_arctan2
+count    5.775089e+07
+mean    -1.506993e+01
+std      1.017421e+02
+min     -1.799998e+02
+25%     -1.035135e+02
+50%     -2.434787e+01
+75%      6.716537e+01
+max      1.800000e+02
+Number of rows has missing value-Null:  91800
+Percentage of Null / total record:  0.15870631463900303  %
+
+
+ =====  Feature  1 :  convergence_index  =====
+RAM % used: 3.7
+RAM Used (GB): 16.489766912
+RAM % used: 3.9
+RAM Used (GB): 17.731334144
+Data type:  float64
+Number of records:  57842689
+       convergence_index
+count       5.784269e+07
+mean       -3.010422e-03
+std         1.249643e+01
+min        -1.000000e+02
+25%        -3.976873e+00
+50%         2.305334e-01
+75%         4.382882e+00
+max         1.000000e+02
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  2 :  convexity  =====
+RAM % used: 3.7
+RAM Used (GB): 16.472109056
+RAM % used: 3.9
+RAM Used (GB): 17.714024448
+Data type:  float64
+Number of records:  57842689
+          convexity
+count  5.784269e+07
+mean   5.022914e+01
+std    6.137045e+00
+min    0.000000e+00
+25%    4.652510e+01
+50%    5.013230e+01
+75%    5.386090e+01
+max    8.557341e+01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  3 :  curv_max  =====
+RAM % used: 3.7
+RAM Used (GB): 16.478806016
+RAM % used: 3.9
+RAM Used (GB): 17.714839552
+Data type:  float64
+Number of records:  57842689
+           curv_max
+count  5.784269e+07
+mean   2.209213e-03
+std    3.641184e-03
+min   -3.450267e-02
+25%    1.765737e-04
+50%    1.294217e-03
+75%    3.153937e-03
+max    9.251083e-02
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  4 :  curv_min  =====
+RAM % used: 3.7
+RAM Used (GB): 16.477503488
+RAM % used: 3.9
+RAM Used (GB): 17.774583808
+Data type:  float64
+Number of records:  57842689
+           curv_min
+count  5.784269e+07
+mean  -2.208881e-03
+std    3.715380e-03
+min   -7.970897e-02
+25%   -3.293562e-03
+50%   -1.233153e-03
+75%   -1.119268e-04
+max    3.903838e-02
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  5 :  curv_plan  =====
+RAM % used: 3.7
+RAM Used (GB): 16.590360576
+RAM % used: 4.0
+RAM Used (GB): 17.865089024
+Data type:  float64
+Number of records:  57842689
+          curv_plan
+count  5.784269e+07
+mean   9.335232e-06
+std    3.065385e-02
+min   -4.359097e+01
+25%   -4.798883e-03
+50%   -3.357635e-04
+75%    4.146717e-03
+max    7.630254e+01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  6 :  curv_prof  =====
+RAM % used: 3.7
+RAM Used (GB): 16.596574208
+RAM % used: 4.0
+RAM Used (GB): 17.86513408
+Data type:  float64
+Number of records:  57842689
+          curv_prof
+count  5.784269e+07
+mean  -8.142383e-05
+std    2.489159e-03
+min   -5.609919e-02
+25%   -1.016666e-03
+50%   -1.601348e-05
+75%    9.499996e-04
+max    5.556353e-02
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  7 :  dah  =====
+RAM % used: 3.7
+RAM Used (GB): 16.595820544
+RAM % used: 4.0
+RAM Used (GB): 17.933017088
+Data type:  float64
+Number of records:  57842689
+                dah
+count  5.784269e+07
+mean   3.063371e-02
+std    2.871867e-01
+min   -9.644365e-01
+25%   -1.738013e-01
+50%    2.775106e-02
+75%    2.426841e-01
+max    9.651864e-01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  8 :  elevation  =====
+RAM % used: 3.7
+RAM Used (GB): 16.596492288
+RAM % used: 4.0
+RAM Used (GB): 17.8240512
+Data type:  float64
+Number of records:  57842689
+          elevation
+count  5.784269e+07
+mean   1.336590e+03
+std    5.900124e+02
+min    3.376620e+02
+25%    8.730110e+02
+50%    1.241517e+03
+75%    1.729197e+03
+max    3.795406e+03
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  9 :  flow_accumulation  =====
+RAM % used: 3.7
+RAM Used (GB): 16.600928256
+RAM % used: 4.0
+RAM Used (GB): 17.9140608
+Data type:  float64
+Number of records:  57842689
+       flow_accumulation
+count       5.784269e+07
+mean        9.359132e+05
+std         6.361580e+07
+min         1.000000e+02
+25%         7.750892e+02
+50%         1.689277e+03
+75%         3.698563e+03
+max         1.166013e+10
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  10 :  flow_path_length  =====
+RAM % used: 3.7
+RAM Used (GB): 16.598708224
+RAM % used: 4.0
+RAM Used (GB): 17.911853056
+Data type:  float64
+Number of records:  57842689
+       flow_path_length
+count      5.784269e+07
+mean       9.798343e+02
+std        1.154437e+03
+min        0.000000e+00
+25%        3.363578e+02
+50%        6.952010e+02
+75%        1.268187e+03
+max        1.939430e+04
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  11 :  flow_width  =====
+RAM % used: 3.7
+RAM Used (GB): 16.66988032
+RAM % used: 4.0
+RAM Used (GB): 17.866768384
+Data type:  float64
+Number of records:  57842689
+         flow_width
+count  5.784269e+07
+mean   1.274755e+01
+std    1.230222e+00
+min    1.000000e+01
+25%    1.180947e+01
+50%    1.305810e+01
+75%    1.386186e+01
+max    1.414214e+01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  12 :  geomorphons  =====
+RAM % used: 3.7
+RAM Used (GB): 16.628916224
+RAM % used: 3.8
+RAM Used (GB): 17.251352576
+Data type:  category
+Number of records:  57842689
+       geomorphons
+count     57842689
+unique          10
+top              6
+freq      26241914
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  13 :  maximum_height  =====
+RAM % used: 3.7
+RAM Used (GB): 17.244991488
+RAM % used: 3.8
+RAM Used (GB): 17.386602496
+Data type:  float64
+Number of records:  57842689
+       maximum_height
+count    5.784269e+07
+mean     1.384245e+03
+std      6.068815e+02
+min      3.380012e+02
+25%      9.083956e+02
+50%      1.292172e+03
+75%      1.795379e+03
+max      3.795406e+03
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  14 :  mrn  =====
+RAM % used: 3.7
+RAM Used (GB): 16.654155776
+RAM % used: 4.0
+RAM Used (GB): 17.889705984
+Data type:  float64
+Number of records:  57842689
+                mrn
+count  5.784269e+07
+mean   2.735158e+00
+std    2.659842e+00
+min    0.000000e+00
+25%    4.972967e-01
+50%    2.157187e+00
+75%    4.136443e+00
+max    7.082149e+01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  15 :  nto  =====
+RAM % used: 3.7
+RAM Used (GB): 16.651292672
+RAM % used: 4.0
+RAM Used (GB): 17.903915008
+Data type:  float64
+Number of records:  57842689
+                nto
+count  5.784269e+07
+mean   1.326907e+00
+std    1.214737e-01
+min    2.596900e-02
+25%    1.261233e+00
+50%    1.330639e+00
+75%    1.395058e+00
+max    1.658318e+00
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  16 :  pto  =====
+RAM % used: 3.7
+RAM Used (GB): 16.64915456
+RAM % used: 4.0
+RAM Used (GB): 17.891610624
+Data type:  float64
+Number of records:  57842689
+                pto
+count  5.784269e+07
+mean   1.325863e+00
+std    1.127587e-01
+min    9.796431e-03
+25%    1.256683e+00
+50%    1.337563e+00
+75%    1.409218e+00
+max    1.684121e+00
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  17 :  roughness  =====
+RAM % used: 3.7
+RAM Used (GB): 16.647159808
+RAM % used: 4.0
+RAM Used (GB): 17.826955264
+Data type:  float64
+Number of records:  57842689
+          roughness
+count  5.784269e+07
+mean   1.115727e+01
+std    7.541400e+00
+min    0.000000e+00
+25%    6.168701e+00
+50%    1.011926e+01
+75%    1.481909e+01
+max    1.029372e+03
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  18 :  sca  =====
+RAM % used: 3.7
+RAM Used (GB): 16.646950912
+RAM % used: 4.0
+RAM Used (GB): 17.91115264
+Data type:  float64
+Number of records:  57842689
+                sca
+count  5.784269e+07
+mean   6.079053e+01
+std    6.592934e+02
+min    7.071068e-01
+25%    1.490129e+00
+50%    4.250215e+00
+75%    1.277684e+01
+max    1.379945e+05
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  19 :  slope  =====
+RAM % used: 3.7
+RAM Used (GB): 16.64841728
+RAM % used: 4.0
+RAM Used (GB): 17.913516032
+Data type:  float64
+Number of records:  57842689
+              slope
+count  5.784269e+07
+mean   2.189938e+01
+std    1.212664e+01
+min    0.000000e+00
+25%    1.328473e+01
+50%    2.141256e+01
+75%    2.993320e+01
+max    8.779026e+01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  20 :  spi  =====
+RAM % used: 3.7
+RAM Used (GB): 16.648409088
+RAM % used: 4.0
+RAM Used (GB): 17.903796224
+Data type:  float64
+Number of records:  57842689
+                spi
+count  5.784269e+07
+mean   2.084166e+01
+std    2.123465e+02
+min    0.000000e+00
+25%    5.005055e-01
+50%    1.658227e+00
+75%    5.273488e+00
+max    8.375304e+04
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  21 :  svf  =====
+RAM % used: 3.7
+RAM Used (GB): 16.64796672
+RAM % used: 4.0
+RAM Used (GB): 17.90459904
+Data type:  float64
+Number of records:  57842689
+                svf
+count  5.784269e+07
+mean   9.004335e-01
+std    7.994817e-02
+min   -1.675759e-01
+25%    8.624397e-01
+50%    9.205607e-01
+75%    9.598454e-01
+max    9.999983e-01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  22 :  tpi  =====
+RAM % used: 3.7
+RAM Used (GB): 16.533676032
+RAM % used: 3.9
+RAM Used (GB): 17.616818176
+Data type:  float64
+Number of records:  57842689
+                tpi
+count  5.784269e+07
+mean   5.078170e-05
+std    1.128779e+00
+min   -1.020760e+03
+25%   -3.255615e-01
+50%    2.685547e-03
+75%    3.315430e-01
+max    3.850073e+02
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  23 :  tri  =====
+RAM % used: 3.7
+RAM Used (GB): 16.532729856
+RAM % used: 4.0
+RAM Used (GB): 17.822449664
+Data type:  float64
+Number of records:  57842689
+                tri
+count  5.784269e+07
+mean   1.097325e+01
+std    7.474286e+00
+min    0.000000e+00
+25%    6.147493e+00
+50%    9.979896e+00
+75%    1.449461e+01
+max    2.887163e+03
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  24 :  twi  =====
+RAM % used: 3.7
+RAM Used (GB): 16.542015488
+RAM % used: 3.9
+RAM Used (GB): 17.790918656
+Data type:  float64
+Number of records:  57842689
+                twi
+count  5.784269e+07
+mean   3.499083e+00
+std    1.744297e+00
+min   -1.555013e+00
+25%    2.541824e+00
+50%    3.093476e+00
+75%    3.742749e+00
+max    1.525545e+01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  25 :  vrm  =====
+RAM % used: 3.7
+RAM Used (GB): 16.541007872
+RAM % used: 3.9
+RAM Used (GB): 17.781293056
+Data type:  float64
+Number of records:  57842689
+                vrm
+count  5.784269e+07
+mean   4.560716e-03
+std    1.158394e-02
+min   -2.413950e-08
+25%    4.418442e-04
+50%    1.374223e-03
+75%    4.003421e-03
+max    7.842655e-01
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  26 :  wei  =====
+RAM % used: 3.7
+RAM Used (GB): 16.572911616
+RAM % used: 4.0
+RAM Used (GB): 17.840467968
+Data type:  float64
+Number of records:  57842689
+                wei
+count  5.784269e+07
+mean   1.043814e+00
+std    1.066528e-01
+min    7.588920e-01
+25%    9.678068e-01
+50%    1.049524e+00
+75%    1.121307e+00
+max    1.343600e+00
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  27 :  clc  =====
+RAM % used: 3.7
+RAM Used (GB): 16.646443008
+RAM % used: 3.8
+RAM Used (GB): 17.231806464
+Data type:  category
+Number of records:  57842689
+             clc
+count   57842679
+unique        23
+top          312
+freq    26051466
+Number of rows has missing value-Null:  10
+Percentage of Null / total record:  1.7288269568518848e-05  %
+
+
+ =====  Feature  28 :  forest_cover  =====
+RAM % used: 3.7
+RAM Used (GB): 17.239384064
+RAM % used: 3.8
+RAM Used (GB): 17.432133632
+Data type:  float64
+Number of records:  57842689
+       forest_cover
+count    57842689.0
+mean            0.0
+std             0.0
+min             0.0
+25%             0.0
+50%             0.0
+75%             0.0
+max             0.0
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  29 :  cwd  =====
+RAM % used: 3.7
+RAM Used (GB): 16.672878592
+RAM % used: 3.9
+RAM Used (GB): 17.586249728
+Data type:  float64
+Number of records:  57842689
+                cwd
+count  5.782559e+07
+mean   1.121073e+01
+std    2.072784e+00
+min    8.000000e+00
+25%    9.550000e+00
+50%    1.110000e+01
+75%    1.230000e+01
+max    2.165000e+01
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  30 :  prcptot  =====
+RAM % used: 3.7
+RAM Used (GB): 16.730722304
+RAM % used: 3.9
+RAM Used (GB): 17.57632512
+Data type:  float64
+Number of records:  57842689
+            prcptot
+count  5.782559e+07
+mean   1.289544e+03
+std    3.040191e+02
+min    8.225050e+02
+25%    1.065835e+03
+50%    1.214160e+03
+75%    1.430870e+03
+max    3.369255e+03
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  31 :  sdii  =====
+RAM % used: 3.7
+RAM Used (GB): 16.674914304
+RAM % used: 3.9
+RAM Used (GB): 17.578999808
+Data type:  float64
+Number of records:  57842689
+               sdii
+count  5.782559e+07
+mean   1.032186e+01
+std    1.296731e+00
+min    7.052250e+00
+25%    9.450291e+00
+50%    1.013698e+01
+75%    1.089247e+01
+max    1.608886e+01
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  32 :  rx5day  =====
+RAM % used: 3.7
+RAM Used (GB): 16.667582464
+RAM % used: 3.9
+RAM Used (GB): 17.563459584
+Data type:  float64
+Number of records:  57842689
+             rx5day
+count  5.782559e+07
+mean   1.564953e+02
+std    6.693086e+01
+min    9.208000e+01
+25%    1.098750e+02
+50%    1.239700e+02
+75%    2.041100e+02
+max    3.831600e+02
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  33 :  rx1day  =====
+RAM % used: 3.7
+RAM Used (GB): 16.67037184
+RAM % used: 3.9
+RAM Used (GB): 17.579143168
+Data type:  float64
+Number of records:  57842689
+             rx1day
+count  5.782559e+07
+mean   7.726410e+01
+std    1.906433e+01
+min    4.655500e+01
+25%    6.416500e+01
+50%    7.080000e+01
+75%    8.556500e+01
+max    1.574850e+02
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  34 :  api_k7  =====
+RAM % used: 3.7
+RAM Used (GB): 16.672157696
+RAM % used: 3.9
+RAM Used (GB): 17.580232704
+Data type:  float64
+Number of records:  57842689
+             api_k7
+count  5.782559e+07
+mean   5.541038e+01
+std    9.819464e+00
+min    3.942498e+01
+25%    4.830648e+01
+50%    5.309072e+01
+75%    6.009344e+01
+max    1.096310e+02
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  35 :  api_k30  =====
+RAM % used: 3.7
+RAM Used (GB): 16.673366016
+RAM % used: 3.9
+RAM Used (GB): 17.59045632
+Data type:  float64
+Number of records:  57842689
+            api_k30
+count  5.782559e+07
+mean   9.201388e+01
+std    1.649696e+01
+min    6.713113e+01
+25%    8.033698e+01
+50%    8.785324e+01
+75%    9.888637e+01
+max    1.926326e+02
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  36 :  spei30  =====
+RAM % used: 3.7
+RAM Used (GB): 16.674996224
+RAM % used: 3.9
+RAM Used (GB): 17.537568768
+Data type:  float64
+Number of records:  57842689
+             spei30
+count  5.782559e+07
+mean   1.602221e+00
+std    3.800221e-02
+min    1.519363e+00
+25%    1.569960e+00
+50%    1.593250e+00
+75%    1.636415e+00
+max    1.687673e+00
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  37 :  pci  =====
+RAM % used: 3.7
+RAM Used (GB): 16.712904704
+RAM % used: 3.9
+RAM Used (GB): 17.63874816
+Data type:  float64
+Number of records:  57842689
+                pci
+count  5.782559e+07
+mean   1.180725e+01
+std    5.203326e-01
+min    9.607711e+00
+25%    1.156673e+01
+50%    1.188074e+01
+75%    1.216091e+01
+max    1.293944e+01
+Number of rows has missing value-Null:  17099
+Percentage of Null / total record:  0.02956121213521038  %
+
+
+ =====  Feature  38 :  sw_hazard_cat  =====
+RAM % used: 3.8
+RAM Used (GB): 16.755511296
+RAM % used: 3.9
+RAM Used (GB): 17.621143552
+Data type:  float64
+Number of records:  57842689
+       sw_hazard_cat
+count   5.765642e+07
+mean    4.598434e-01
+std     6.894606e-01
+min     0.000000e+00
+25%     0.000000e+00
+50%     0.000000e+00
+75%     1.000000e+00
+max     3.000000e+00
+Number of rows has missing value-Null:  186270
+Percentage of Null / total record:  0.32202859725280064  %
+
+
+ =====  Feature  39 :  sw_max_speed  =====
+RAM % used: 3.7
+RAM Used (GB): 16.709701632
+RAM % used: 4.0
+RAM Used (GB): 17.928671232
+Data type:  float64
+Number of records:  57842689
+       sw_max_speed
+count  5.767730e+07
+mean   3.416660e-01
+std    4.622283e-01
+min    3.510409e-04
+25%    1.338030e-01
+50%    2.082336e-01
+75%    3.425848e-01
+max    5.000000e+00
+Number of rows has missing value-Null:  165393
+Percentage of Null / total record:  0.2859358768746038  %
+
+
+ =====  Feature  40 :  sw_max_depth  =====
+RAM % used: 3.7
+RAM Used (GB): 16.708169728
+RAM % used: 4.0
+RAM Used (GB): 17.950588928
+Data type:  float64
+Number of records:  57842689
+       sw_max_depth
+count  5.767730e+07
+mean   7.602423e-02
+std    2.850088e-01
+min    9.997189e-04
+25%    1.104554e-02
+50%    2.042592e-02
+75%    4.751380e-02
+max    4.000000e+00
+Number of rows has missing value-Null:  165393
+Percentage of Null / total record:  0.2859358768746038  %
+
+
+ =====  Feature  41 :  sw_spec_runoff  =====
+RAM % used: 3.8
+RAM Used (GB): 16.73725952
+RAM % used: 4.0
+RAM Used (GB): 17.988866048
+Data type:  float64
+Number of records:  57842689
+       sw_spec_runoff
+count    5.767730e+07
+mean     1.060921e+02
+std      7.859722e+02
+min      6.002172e-03
+25%      1.439830e+00
+50%      3.750124e+00
+75%      1.297276e+01
+max      2.000000e+04
+Number of rows has missing value-Null:  165393
+Percentage of Null / total record:  0.2859358768746038  %
+
+
+ =====  Feature  42 :  dist  =====
+RAM % used: 3.7
+RAM Used (GB): 16.72579072
+RAM % used: 4.0
+RAM Used (GB): 18.079977472
+Data type:  float64
+Number of records:  57842689
+               dist
+count  5.784269e+07
+mean   1.483538e+02
+std    1.545285e+02
+min    4.246943e-03
+25%    3.513576e+01
+50%    8.649609e+01
+75%    2.014141e+02
+max    5.000000e+02
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+
+ =====  Feature  43 :  geometry  =====
+RAM % used: 3.7
+RAM Used (GB): 16.722116608
+RAM % used: 5.6
+RAM Used (GB): 26.572849152
+Data type:  object
+Number of records:  57842689
+                                                 geometry
+count                                            57842689
+unique                                           57842689
+top     b'\x01\x01\x00\x00\x00\x00\x00\x00\x00\xb0\x99...
+freq                                                    1
+Number of rows has missing value-Null:  0
+Percentage of Null / total record:  0.0  %
+
+ Null list:  [('aspect_arctan2', 0.159), ('clc', 0.0), ('cwd', 0.03), ('prcptot', 0.03), ('sdii', 0.03), ('rx5day', 0.03), ('rx1day', 0.03), ('api_k7', 0.03), ('api_k30', 0.03), ('spei30', 0.03), ('pci', 0.03), ('sw_hazard_cat', 0.322), ('sw_max_speed', 0.286), ('sw_max_depth', 0.286), ('sw_spec_runoff', 0.286)]
+
+ Feature with maximum % Null:  sw_hazard_cat   --  0.32202859725280064  %
