@@ -1,13 +1,13 @@
 
 ## prepare folders like description below ##
-- project folder
-        + code (you are here):
-        + results: create "stored_folder" related to different experiments, like
+- project folder</br>
+        + code (you are here):</br>
+        + results: create "stored_folder" related to different experiments, like</br>
                 ~ 01_UNET_MULTI_RESOLUTION
                 .......
-        + predictions_folder:
-        + dataset (don't create this one):  when you run main, it will automatically create this folder and the following folders:
-                ~ train/test/val folders: each of them will have img/mask folder
+        + predictions_folder:</br>
+        + dataset (don't create this one):  when you run main, it will automatically create this folder and the following folders:</br>
+                ~ train/test/val folders: each of them will have img/mask folder</br>
         + zip_data : place Landslide4Sense .zip file here
 
 
