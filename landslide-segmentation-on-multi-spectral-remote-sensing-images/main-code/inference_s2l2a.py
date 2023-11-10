@@ -158,11 +158,9 @@ def predictLandslide(model, x_seq, img_index, img_per_rowcol=86):
     ## loop through every images in a batch
     for i in range(tmp.shape[0]):
         if tmp[i] == 1:
-            if img_index % img_per_rowcol == 0:
-                row = img_index // img_per_rowcol
-            else:
-                row = img_index // img_per_rowcol + 1
-            col = img_index - (row-1)*img_per_rowcol 
+            row = img_index // img_per_rowcol + 1
+            col = img_index - (row-1)*img_per_rowcol  + 1
+            
             re_list.append((row-1, col-1, mask[i].numpy()))
             if row > img_per_rowcol or col > img_per_rowcol:
                 print("Something wrong due to the row col assignment !")
