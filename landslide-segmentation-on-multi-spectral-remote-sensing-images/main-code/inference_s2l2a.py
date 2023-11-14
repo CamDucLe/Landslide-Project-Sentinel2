@@ -158,8 +158,13 @@ def predictLandslide(model, x_seq, img_index, img_per_rowcol=86):
     ## loop through every images in a batch
     for i in range(tmp.shape[0]):
         if tmp[i] == 1:
-            row = img_index // img_per_rowcol + 1
-            col = img_index - (row-1)*img_per_rowcol  + 1
+            if img_index == 7395: # last batch
+                idx = (img_index-45+i)
+            else:   # normal batch
+                idx = (img_index-49+i)
+                
+            row = idx // img_per_rowcol + 1
+            col = idx - (row-1)*img_per_rowcol  + 1
             
             re_list.append((row-1, col-1, mask[i].numpy()))
             if row > img_per_rowcol or col > img_per_rowcol:
@@ -205,7 +210,10 @@ def predictOneImage(model, l_img):
 
             ## increase number of images in a batch
             count += 1
-            img_index += 1
+            if count == 1:
+                img_index = 0
+            else:
+                img_index += 1
 
             ## make predictions
             if (count == 50) or ((h == batch_h[0]-1) and (w == batch_w[0]-1)): # count == 30 for 2080 and count == 50 for TITAN
